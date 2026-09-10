@@ -1,0 +1,211 @@
+═══════════════════════════════════════════════════════════════════════════════
+                        YOUR NEXT ACTIONS - RIGHT NOW
+═══════════════════════════════════════════════════════════════════════════════
+
+CURRENT STATUS:
+✅ Microphone test firmware READY (mic_test.ino)
+✅ Exact wiring instructions READY (CONNECTIONS_YOUR_SETUP.md)
+✅ Training RUNNING in background (~90 min remaining)
+✅ All documentation prepared
+
+═══════════════════════════════════════════════════════════════════════════════
+                            ACTION PLAN - IN ORDER
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: GATHER YOUR HARDWARE (5 minutes)
+────────────────────────────────────────
+□ ESP32-S3 DevKit
+□ INMP441 microphone module
+□ Breadboard
+□ 6× Jumper wires (different colors recommended)
+□ USB cable (for ESP32 programming)
+□ (Optional) USB TTL adapter
+
+Location: Check Kiro workspace folder
+  📁 c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+
+Essential Files:
+  📄 QUICK_START.txt              ← Read this FIRST
+  📄 CONNECTIONS_YOUR_SETUP.md    ← Wiring diagram (detailed)
+  📄 mic_test.ino                 ← Firmware to flash
+
+
+STEP 2: WIRE YOUR MICROPHONE (15-20 minutes)
+─────────────────────────────────────────────
+Follow: CONNECTIONS_YOUR_SETUP.md
+
+6 Connections to make:
+┌─ RED wire:   ESP32 3.3V    → INMP441 VCC (pin 6)
+├─ BLACK #1:   ESP32 GND     → INMP441 GND (pin 1)
+├─ BLACK #2:   ESP32 GND     → INMP441 L/R (pin 2)      ← IMPORTANT: 2 GND wires
+├─ YELLOW:     ESP32 GPIO 4  → INMP441 SCK (pin 3)
+├─ GREEN:      ESP32 GPIO 5  → INMP441 WS (pin 5)
+└─ BLUE:       ESP32 GPIO 6  → INMP441 SD (pin 4)
+
+Safety Check:
+  ✓ No RED touching BLACK
+  ✓ All wires firmly in breadboard
+  ✓ Pin labels match
+
+
+STEP 3: FLASH MICROPHONE FIRMWARE (10 minutes)
+───────────────────────────────────────────────
+1. Open Arduino IDE (download from arduino.cc if needed)
+
+2. New Sketch → Copy mic_test.ino contents
+
+3. Select Board:
+   Tools → Board → Search "ESP32-S3"
+           → ESP32-S3 Dev Module
+
+4. Select Port:
+   Tools → Port → COMx (ESP32 appears here when USB connected)
+
+5. Upload:
+   Sketch → Upload (or Ctrl+U)
+   Wait for: "Leaving... Hard resetting via RTS pin"
+
+
+STEP 4: TEST MICROPHONE (10 minutes)
+─────────────────────────────────────
+1. Open Serial Monitor:
+   Tools → Serial Monitor
+   Baud rate: 9600
+
+2. Expected output:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+   Listening for audio...
+   
+   MIC TEST
+   samples=8000
+   rms=42
+   peak=120
+   min=-80
+   max=100
+   ---
+
+3. Test speaking:
+   → Speak "DORA" clearly at microphone
+   → Watch RMS and peak values in Serial Monitor
+   → VALUES MUST JUMP UP when you speak
+   → VALUES DROP BACK DOWN when you're silent
+
+4. Result:
+   ✅ IF values change clearly:  Report "MIC PASS"
+   ❌ IF values stay at ~0:       Report error message
+
+
+STEP 5: MONITOR TRAINING (Running in background)
+─────────────────────────────────────────────────
+Check every 10 minutes:
+
+1. Where: Kiro IDE bottom panel → Terminal
+2. What to look for:
+   Step #500: accuracy 87%, recall 73%
+   Step #1000: accuracy 91%, recall 77%
+   Step #5000: accuracy 94%, recall 82%
+   Step #15000: accuracy 95%, recall 85%  ← DONE!
+
+3. Time estimate:
+   Started: ~21:50 UTC
+   Expected: ~23:20 UTC (90 minutes)
+
+4. Completion signal:
+   "✓ Model exported successfully"
+   New file: trained_models/DORA/tflite_stream_state_internal_quant/
+             stream_state_internal_quant.tflite
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              TIMELINE ESTIMATE
+═══════════════════════════════════════════════════════════════════════════════
+
+Activity                        Duration        Cumulative
+─────────────────────────────────────────────────────────
+Step 1: Gather hardware         5 min           5 min
+Step 2: Wire microphone         20 min          25 min      ← You
+Step 3: Flash firmware          10 min          35 min      ← You
+Step 4: Test microphone         10 min          45 min      ← You
+Step 5: Wait for training       90 min          135 min     ← Background
+
+PARALLEL: While you test hardware, training runs automatically!
+TOTAL TIME: ~2 hours (well within 4-hour window)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           AFTER EACH STEP - REPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+After Step 4 (Microphone test):
+► "MIC PASS - RMS jumped to 250 when speaking"
+  OR
+► "MIC FAIL - Serial shows only zeros"
+
+After Training:
+► "TRAINING COMPLETE - model file found (68 KB)"
+
+Then: Kiro integrates model + creates full KWS firmware
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          KEY FILES YOU NEED NOW
+═══════════════════════════════════════════════════════════════════════════════
+
+📁 c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+
+Must read:
+  1️⃣  QUICK_START.txt                 ← Start here
+  2️⃣  CONNECTIONS_YOUR_SETUP.md       ← Wiring with diagrams
+  3️⃣  mic_test.ino                    ← Firmware (copy to Arduino)
+
+Reference:
+  📄 README_MIC_TEST.md               ← Full setup guide
+  📄 WIRING_QUICK_REF.txt             ← GPIO reference card
+  📄 NEXT_STEPS_AFTER_MIC_PASS.md    ← What happens after
+
+Training:
+  📄 TRAINING_TERMINAL_INFO.md        ← Where to find terminal
+  📄 training_parameters_DORA_FIXED.yaml ← Config file (don't edit)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                            TROUBLESHOOTING QUICK LINKS
+═══════════════════════════════════════════════════════════════════════════════
+
+Problem: "Arduino IDE won't upload"
+→ Check: Port is selected (Tools → Port)
+→ Check: Board is "ESP32-S3 Dev Module"
+→ Check: USB cable is working (try different port on PC)
+
+Problem: "Serial Monitor shows garbage text"
+→ Check: Baud rate is 9600 (bottom-right dropdown)
+→ Check: USB cable connected before opening monitor
+
+Problem: "Microphone shows only zeros"
+→ Check: All 6 wires are firmly connected
+→ Check: L/R pin is connected to GND (pin 2 → GND)
+→ Check: GPIO 4, 5, 6 connections are solid
+
+Problem: "Training terminal not visible"
+→ Kiro IDE → Click Terminal tab at bottom
+→ Or press Ctrl+` to open terminal
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                               READY? START NOW!
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ All documentation prepared
+✓ Firmware ready
+✓ Training running
+✓ Hardware test kit available
+
+Next: Gather hardware and start wiring!
+
+Questions? Check documentation files or report errors.
+
+Good luck! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════

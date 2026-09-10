@@ -1,0 +1,168 @@
+================================================================================
+                    QUICK START - MIC TEST HARDWARE
+================================================================================
+
+YOUR SETUP:
+✓ ESP32-S3 DevKit on breadboard
+✓ INMP441 Microphone (circular, 6 pins)
+✓ Breadboard + jumper wires
+✓ USB cable for programming
+
+================================================================================
+EXACT 6 CONNECTIONS TO MAKE
+================================================================================
+
+INMP441 Module (looking at flat side with pin labels):
+
+    Top-Left        Top-Right
+    GND (1)  ----  VCC (6)
+    L/R (2)  ----  WS  (5)
+    SCK (3)  ----  SD  (4)
+
+BREADBOARD CONNECTION (Do in order):
+
+┌─ POWER FIRST (Verify no shorts!)
+│
+├─ 1. RED wire: ESP32-S3 3.3V pin → INMP441 VCC (pin 6)
+├─ 2. BLACK wire #1: ESP32-S3 GND → INMP441 GND (pin 1)
+├─ 3. BLACK wire #2: ESP32-S3 GND → INMP441 L/R (pin 2)
+│
+├─ SIGNALS (After power verified)
+│
+├─ 4. YELLOW wire: ESP32-S3 GPIO 4 → INMP441 SCK (pin 3)
+├─ 5. GREEN wire: ESP32-S3 GPIO 5 → INMP441 WS (pin 5)
+└─ 6. BLUE wire: ESP32-S3 GPIO 6 → INMP441 SD (pin 4)
+
+TOTAL: 6 WIRES
+  - 1× RED (3.3V)
+  - 2× BLACK (GND - two separate connections)
+  - 1× YELLOW (GPIO 4)
+  - 1× GREEN (GPIO 5)
+  - 1× BLUE (GPIO 6)
+
+================================================================================
+AFTER WIRING (No USB yet!)
+================================================================================
+
+SAFETY CHECK:
+  [ ] RED and BLACK wires don't touch
+  [ ] No loose connections
+  [ ] All wires firmly in breadboard holes
+  [ ] INMP441 pins not bent
+
+THEN: Connect USB cable to ESP32-S3
+
+================================================================================
+FLASH FIRMWARE
+================================================================================
+
+1. Open Arduino IDE
+   → File → New Sketch
+
+2. Copy this entire file (without this header):
+   📁 c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\mic_test.ino
+   → Paste into Arduino IDE
+
+3. Board Selection:
+   → Tools → Board → Search "ESP32-S3"
+   → Select "ESP32-S3 Dev Module"
+
+4. Port Selection:
+   → Tools → Port → COMx (usually COM3-COM5)
+   → If unsure, look at Device Manager when USB plugged in
+
+5. Upload:
+   → Sketch → Upload  (or press Ctrl+U)
+   → Wait for: "Leaving... Hard resetting via RTS pin"
+
+================================================================================
+TEST MICROPHONE
+================================================================================
+
+1. Open Serial Monitor:
+   → Tools → Serial Monitor
+   → Set baud rate to 9600
+   → Should see:
+
+      =====================================================
+      DORA MICROPHONE TEST - ESP32-S3 + INMP441
+      =====================================================
+      ...
+      Listening for audio... Speak or clap near microphone!
+
+2. Speak Test (5 seconds):
+   → Speak "DORA" clearly into microphone
+   → Watch Serial Monitor output
+   → RMS and peak values MUST JUMP UP
+   → Example:
+      
+      MIC TEST
+      samples=8000
+      rms=250        ← JUMPED from ~30
+      peak=800       ← JUMPED from ~50
+      min=-500
+      max=600
+      ---
+
+3. Silent Test (10 seconds):
+   → Don't make any sound
+   → Values should drop back to 0-50 range
+
+================================================================================
+SUCCESS SIGNAL
+================================================================================
+
+If RMS/peak values change when you speak/clap:
+  
+  >>> REPORT: "MIC PASS" <<<
+  
+  Then:
+  1. Kiro will integrate trained DORA model
+  2. You'll get full KWS firmware (kws_streaming.ino)
+  3. Test real keyword detection on device
+
+If values stay at 0 or errors appear:
+  
+  >>> REPORT: "MIC FAIL - [error message]" <<<
+  
+  Troubleshooting:
+  - Check GPIO wires are not loose
+  - Verify GND connections (especially L/R to GND)
+  - Try different USB cable
+  - Check Arduino IDE board/port selection
+
+================================================================================
+TRAINING STATUS (Running in background)
+================================================================================
+
+Training Terminal: Running (don't interrupt!)
+Location: See Kiro IDE terminal panel
+Expected: ~90 minutes to completion
+Deliverable: stream_state_internal_quant.tflite (int8 quantized model)
+
+You can proceed with MIC TEST while training runs.
+Upon MIC PASS + Training complete → Integrate model
+
+================================================================================
+NEXT AFTER MIC PASS
+================================================================================
+
+See: NEXT_STEPS_AFTER_MIC_PASS.md
+
+Summary:
+1. Extract quantized model from training output
+2. Create kws_streaming.ino (full KWS pipeline)
+3. Flash to ESP32-S3
+4. Test real "DORA" detection on device
+
+================================================================================
+READY? START WITH STEP 1 (WIRING)
+================================================================================
+
+Questions? Check:
+- CONNECTIONS_YOUR_SETUP.md (detailed with diagrams)
+- README_MIC_TEST.md (full setup guide)
+- WIRING_QUICK_REF.txt (GPIO reference)
+
+Good luck! 🚀
+================================================================================

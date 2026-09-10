@@ -1,0 +1,116 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                      DO THIS NOW - 3 MINUTE FIX                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+PROBLEM
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Code compiled successfully (292 KB, fits fine)
+✗ USB upload timeout: "Write timeout" on COM3
+
+
+SOLUTION (Try in order - takes 3 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+ATTEMPT 1 (30 seconds):
+  1. Unplug USB from ESP32
+  2. Wait 3 seconds
+  3. Plug USB back in
+  4. Arduino IDE: Sketch → Upload (Ctrl+U)
+  → WORKS? Great! Go to testing
+  → FAILS? Continue to Attempt 2
+
+
+ATTEMPT 2 (1 minute):
+  1. Tools → Upload Speed → Change to 115200 (slower)
+  2. Arduino IDE: Sketch → Upload (Ctrl+U)
+  → WORKS? Great! Go to testing
+  → FAILS? Continue to Attempt 3
+
+
+ATTEMPT 3 (1 minute - requires button):
+  1. Arduino IDE: Sketch → Upload (Ctrl+U)
+  2. Wait until you see "Connecting..." message
+  3. Hold BOOT button on ESP32 for 2 seconds
+     (BOOT button usually on top or side edge)
+  4. Release button
+  5. Arduino should now upload
+  → WORKS? Great! Go to testing
+  → FAILS? Try different USB port
+
+
+ATTEMPT 4 (1 minute - different USB port):
+  1. Unplug USB from current port
+  2. Plug into DIFFERENT USB port on computer
+  3. Arduino IDE: Tools → Port
+  4. Select new COMx that appears
+  5. Sketch → Upload (Ctrl+U)
+  → WORKS? Great! Go to testing
+  → FAILS? See "USB_TIMEOUT_FIX.txt" for more options
+
+
+AFTER SUCCESSFUL UPLOAD
+════════════════════════════════════════════════════════════════════════════════
+
+You'll see in Arduino IDE:
+  "Leaving... Hard resetting via RTS pin"
+  [Upload done - usually within 30 seconds]
+
+Then:
+  1. Tools → Serial Monitor
+  2. Bottom-right: Set to 9600 baud
+  3. Should see:
+     =====================================================
+     DORA MICROPHONE TEST - ESP32-S3 + INMP441
+     =====================================================
+
+
+MICROPHONE TEST (5 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+In Serial Monitor:
+
+1. Wait for output to stabilize (10 seconds)
+
+2. Speak "DORA" clearly into microphone for 5 seconds
+
+3. Watch Serial Monitor for values
+
+4. RESULT:
+
+   ✅ MIC PASS - if RMS and peak JUMP UP:
+      MIC TEST
+      samples=16000
+      rms=250      ← JUMPED from ~40
+      peak=800     ← JUMPED from ~100
+      
+   ❌ MIC FAIL - if values stay same:
+      MIC TEST
+      samples=16000
+      rms=40       ← Same as before
+      peak=95      ← Same as before
+
+
+REPORT BACK
+════════════════════════════════════════════════════════════════════════════════
+
+Tell me:
+
+✅ Upload successful:
+   "Upload done. Serial Monitor shows mic test output. RMS jumped to 250 when speaking - MIC PASS"
+
+❌ Upload still failing:
+   "Attempt 1-4 all failed. Which attempt did you try?"
+
+❓ Unsure about values:
+   "Serial Monitor shows rms=150 peak=500 before speaking, same values after - is that MIC PASS?"
+
+
+START NOW!
+════════════════════════════════════════════════════════════════════════════════
+
+Attempt 1: 30 seconds
+→ Report if works or goes to Attempt 2
+
+═══════════════════════════════════════════════════════════════════════════════

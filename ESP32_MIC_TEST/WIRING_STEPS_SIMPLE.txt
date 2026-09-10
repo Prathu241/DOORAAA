@@ -1,0 +1,251 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    WIRING - SIMPLE STEP-BY-STEP GUIDE                        ║
+║                     (Follow these steps in exact order)                       ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+BEFORE YOU START:
+✓ Unplug ESP32-S3 from USB (NO POWER while wiring)
+✓ Gather all 6 wires (RED, 2× BLACK, YELLOW, GREEN, BLUE)
+✓ Have your INMP441 microphone module ready
+✓ Breadboard on flat surface
+
+
+════════════════════════════════════════════════════════════════════════════════
+STEP 1: IDENTIFY YOUR PINS
+════════════════════════════════════════════════════════════════════════════════
+
+Your INMP441 Module (circular, flat side shows text):
+
+Look at the FLAT SIDE with text printed on it:
+
+        GND ---- VCC
+        L/R ---- WS
+        SCK ---- SD
+
+Numbering (top-left clockwise):
+  1. GND   (top-left)
+  2. L/R   (middle-left)
+  3. SCK   (bottom-left)
+  4. SD    (bottom-right)
+  5. WS    (middle-right)
+  6. VCC   (top-right)
+
+⚠️ CRITICAL: L/R pin (2) MUST go to GND for MONO mode!
+
+
+════════════════════════════════════════════════════════════════════════════════
+STEP 2: POWER CONNECTIONS (RED & BLACK WIRES)
+════════════════════════════════════════════════════════════════════════════════
+
+RED WIRE (3.3V Power):
+────────────────────────
+
+1. Find ESP32-S3 3.3V pin
+   - Look at TOP side of ESP32-S3
+   - Left side near the USB port
+   - Label shows: 3V3 or 3.3V
+
+2. Plug RED wire into 3.3V pin
+
+3. Route RED wire to breadboard TOP-LEFT [+] rail
+
+4. Plug INMP441 VCC (pin 6) into same [+] rail
+
+ACTION: RED wire connects ESP32 3.3V → [+] rail → INMP441 pin 6
+
+
+BLACK WIRE #1 (Ground):
+──────────────────────
+
+1. Find ESP32-S3 GND pin
+   - Multiple GND pins available
+   - Pick ANY one (usually on sides or bottom)
+
+2. Plug BLACK wire into GND pin
+
+3. Route BLACK wire to breadboard BOTTOM-LEFT [-] rail
+
+4. Plug INMP441 GND (pin 1) into [-] rail
+
+ACTION: BLACK wire #1 connects ESP32 GND → [-] rail → INMP441 pin 1
+
+
+BLACK WIRE #2 (Ground for Mono):
+──────────────────────────────
+
+1. From same [-] rail (where you plugged BLACK wire #1)
+
+2. Plug INMP441 L/R (pin 2) into [-] rail
+
+⚠️ BOTH pin 1 AND pin 2 go to GND (same rail)
+   This sets INMP441 to MONO mode
+
+ACTION: BLACK wire #2 (same rail) → INMP441 pin 2
+
+
+SAFETY CHECK AT THIS POINT:
+☐ RED wire NOT touching BLACK wire
+☐ RED wire solid connection to 3.3V and [+] rail
+☐ BLACK wires solid in GND and [-] rail
+☐ INMP441 VCC (pin 6) in [+] rail
+☐ INMP441 GND (pin 1) in [-] rail
+☐ INMP441 L/R (pin 2) in [-] rail (same as GND)
+
+
+════════════════════════════════════════════════════════════════════════════════
+STEP 3: SIGNAL CONNECTIONS (YELLOW, GREEN, BLUE WIRES)
+════════════════════════════════════════════════════════════════════════════════
+
+YELLOW WIRE (GPIO 4 → SCK Clock):
+──────────────────────────────────
+
+1. Find ESP32-S3 GPIO 4 pin
+   - LEFT side of ESP32-S3
+   - Pin labeled: 4 or GPIO4
+
+2. Plug YELLOW wire into GPIO 4
+
+3. Route YELLOW wire to breadboard MIDDLE area
+
+4. Plug INMP441 SCK (pin 3) into breadboard
+
+ACTION: YELLOW wire: GPIO 4 → INMP441 pin 3
+
+
+GREEN WIRE (GPIO 5 → WS Word Select):
+──────────────────────────────────────
+
+1. Find ESP32-S3 GPIO 5 pin
+   - LEFT side of ESP32-S3, right below GPIO 4
+   - Pin labeled: 5 or GPIO5
+
+2. Plug GREEN wire into GPIO 5
+
+3. Route GREEN wire to breadboard
+
+4. Plug INMP441 WS (pin 5) into breadboard
+
+ACTION: GREEN wire: GPIO 5 → INMP441 pin 5
+
+
+BLUE WIRE (GPIO 6 → SD Data):
+──────────────────────────────
+
+1. Find ESP32-S3 GPIO 6 pin
+   - LEFT side of ESP32-S3, right below GPIO 5
+   - Pin labeled: 6 or GPIO6
+
+2. Plug BLUE wire into GPIO 6
+
+3. Route BLUE wire to breadboard
+
+4. Plug INMP441 SD (pin 4) into breadboard
+
+ACTION: BLUE wire: GPIO 6 → INMP441 pin 4
+
+
+════════════════════════════════════════════════════════════════════════════════
+STEP 4: FINAL VERIFICATION
+════════════════════════════════════════════════════════════════════════════════
+
+Check all 6 connections:
+
+┌─ POWER (3 wires)
+│  ☐ RED:     ESP32 3.3V  → [+] rail → INMP441 VCC (pin 6)
+│  ☐ BLACK #1: ESP32 GND  → [-] rail → INMP441 GND (pin 1)
+│  ☐ BLACK #2: ESP32 GND  → [-] rail → INMP441 L/R (pin 2)
+│
+├─ SIGNALS (3 wires)
+│  ☐ YELLOW: ESP32 GPIO 4 → INMP441 SCK (pin 3)
+│  ☐ GREEN:  ESP32 GPIO 5 → INMP441 WS  (pin 5)
+│  ☐ BLUE:   ESP32 GPIO 6 → INMP441 SD  (pin 4)
+│
+├─ SAFETY
+│  ☐ No loose connections (all wires firmly seated)
+│  ☐ No bent pins on INMP441
+│  ☐ RED and BLACK do not touch
+│  ☐ Breadboard clean and dry
+│
+└─ READY: All checks pass
+
+
+════════════════════════════════════════════════════════════════════════════════
+STEP 5: PLUG IN USB
+════════════════════════════════════════════════════════════════════════════════
+
+1. Verify all wiring is correct (use checklist above)
+
+2. Connect USB cable to ESP32-S3
+
+3. Connect USB to your computer
+
+4. ESP32 should power on (LED might blink)
+
+⚠️ If USB is plugged in BEFORE wiring is complete:
+   Risk of shorts - ALWAYS wire first, USB last!
+
+
+════════════════════════════════════════════════════════════════════════════════
+WHAT YOU SHOULD SEE
+════════════════════════════════════════════════════════════════════════════════
+
+After USB plugged in:
+
+✓ ESP32-S3 LED might blink or light up
+✓ No smoke or burning smell
+✓ INMP441 module might have a small LED (optional)
+✓ Everything should be cool to touch
+
+If you see:
+✗ Smoke → UNPLUG IMMEDIATELY, check for shorts
+✗ Hot components → UNPLUG, review wiring
+✗ Nothing works → Check USB cable, try different port
+
+
+════════════════════════════════════════════════════════════════════════════════
+NEXT STEP: FLASH FIRMWARE
+════════════════════════════════════════════════════════════════════════════════
+
+Once wiring is complete and verified:
+
+1. Open Arduino IDE
+2. Copy mic_test.ino code into new sketch
+3. Select Board: ESP32-S3 Dev Module
+4. Select Port: COMx (your ESP32's port)
+5. Click Upload
+
+See: Arduino IDE setup instructions in README_MIC_TEST.md
+
+
+════════════════════════════════════════════════════════════════════════════════
+COMMON MISTAKES TO AVOID
+════════════════════════════════════════════════════════════════════════════════
+
+❌ WRONG: L/R pin floating (not connected)
+   ✓ RIGHT: L/R pin connected to GND (same as pin 1)
+
+❌ WRONG: GPIO pins 4, 5, 6 confused
+   ✓ RIGHT: GPIO 4→SCK, GPIO 5→WS, GPIO 6→SD
+
+❌ WRONG: Using different GND connections for L/R
+   ✓ RIGHT: Both L/R and GND use same breadboard rail
+
+❌ WRONG: Plugging USB before wiring
+   ✓ RIGHT: Wire everything first, USB last
+
+❌ WRONG: Loose connections in breadboard
+   ✓ RIGHT: Push wires firmly into holes until seated
+
+
+════════════════════════════════════════════════════════════════════════════════
+READY? START WIRING NOW!
+════════════════════════════════════════════════════════════════════════════════
+
+Follow steps 1-5 in order.
+Take photos if you want to verify.
+Report "WIRING COMPLETE" when done!
+
+Next: Flash firmware to ESP32-S3
+
+════════════════════════════════════════════════════════════════════════════════

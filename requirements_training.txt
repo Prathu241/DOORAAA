@@ -1,0 +1,9 @@
+tensorflow==2.15.0
+tensorflow-model-optimization
+numpy
+librosa
+soundfile
+sounddevice
+pydub
+ffmpeg-python
+tqdm

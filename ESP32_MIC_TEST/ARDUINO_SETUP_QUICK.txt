@@ -1,0 +1,266 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                  ARDUINO IDE - QUICK SETUP & UPLOAD GUIDE                    ║
+║                         (Flash mic_test.ino)                                 ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+PART 1: INSTALL ARDUINO IDE (if needed)
+════════════════════════════════════════════════════════════════════════════════
+
+IF YOU DON'T HAVE ARDUINO IDE:
+1. Go to arduino.cc
+2. Download "Arduino IDE" (latest version)
+3. Install normally (Windows installer)
+4. Launch Arduino IDE
+
+
+PART 2: INSTALL ESP32 BOARD SUPPORT (if needed)
+════════════════════════════════════════════════════════════════════════════════
+
+In Arduino IDE:
+
+1. File → Preferences
+   (or Arduino → Settings on Mac)
+
+2. Look for "Additional Boards Manager URLs:" field
+
+3. Paste this URL:
+   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+
+4. Click OK
+
+5. Now go to: Tools → Board → Boards Manager
+
+6. Search for "esp32"
+
+7. Click "esp32" entry by Espressif Systems
+
+8. Click Install (wait 2-3 minutes)
+
+9. Close Boards Manager
+
+✓ ESP32 support is now installed
+
+
+PART 3: GET THE FIRMWARE CODE
+════════════════════════════════════════════════════════════════════════════════
+
+1. Locate this file:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\mic_test.ino
+
+2. Open with any text editor (Notepad works)
+
+3. Select ALL (Ctrl+A)
+
+4. Copy (Ctrl+C)
+
+
+PART 4: CREATE NEW SKETCH IN ARDUINO IDE
+════════════════════════════════════════════════════════════════════════════════
+
+1. Arduino IDE → File → New Sketch
+
+2. You should see empty code area
+
+3. Delete any placeholder code
+
+4. Paste your copied code (Ctrl+V)
+
+5. File → Save As
+   Name: "mic_test"
+   Location: Any folder (Arduino will create a subfolder)
+   Click Save
+
+✓ Sketch is now saved
+
+
+PART 5: SELECT BOARD
+════════════════════════════════════════════════════════════════════════════════
+
+1. Tools → Board → ESP32 Arduino
+
+2. Look for list of boards
+
+3. Find: "ESP32-S3 Dev Module"
+
+4. Click it
+
+✓ Board selected
+
+
+PART 6: SELECT PORT (WHERE ESP32 IS CONNECTED)
+════════════════════════════════════════════════════════════════════════════════
+
+Before this step: PLUG ESP32 USB INTO YOUR COMPUTER
+
+1. Tools → Port
+
+2. You should see ports listed:
+   - COMx (ESP32 will appear here)
+   - COM1, COM2, etc.
+
+3. If you see multiple, look for one that appeared recently
+   (Device Manager can help - plug/unplug to see which port lights up)
+
+4. Click the ESP32 port
+
+✓ Port selected
+
+
+PART 7: UPLOAD FIRMWARE
+════════════════════════════════════════════════════════════════════════════════
+
+1. Sketch → Upload
+   (or press Ctrl+U)
+
+2. You should see progress bar at bottom:
+   "Uploading..."
+
+3. Wait for completion message:
+   "Leaving... Hard resetting via RTS pin"
+
+4. If you see "Upload successful":
+   ✓ FIRMWARE UPLOADED!
+
+If you see "COM port not found":
+   → Check USB cable is connected
+   → Try different USB port on computer
+   → Go back to Part 6 and select correct port
+
+
+PART 8: OPEN SERIAL MONITOR (see microphone output)
+════════════════════════════════════════════════════════════════════════════════
+
+After successful upload:
+
+1. Tools → Serial Monitor
+
+2. Window opens at bottom showing output
+
+3. Bottom-right shows baud rate: should be 9600
+
+4. If not 9600:
+   - Click dropdown (bottom-right)
+   - Select 9600
+
+5. You should see:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+   ...
+   Listening for audio... Speak or clap near microphone!
+
+6. Then you see repeating output like:
+   MIC TEST
+   samples=8000
+   rms=42.5
+   peak=110
+   min=-90
+   max=95
+   ---
+
+
+PART 9: TEST MICROPHONE
+════════════════════════════════════════════════════════════════════════════════
+
+In Serial Monitor:
+
+1. SILENT TEST (10 sec):
+   - Don't make any sound
+   - Watch Serial Monitor
+   - RMS should be ~30-50
+   - Peak should be ~50-100
+   - All values should be small
+
+2. SPEAK TEST (5 sec):
+   - Speak "DORA" clearly into microphone
+   - Watch Serial Monitor
+   - RMS should JUMP to 150-300+
+   - Peak should JUMP to 400-800+
+   - Values should clearly change from silent test
+
+3. CLAP TEST (3 sec):
+   - Clap loudly near microphone
+   - Peak should spike to 1000+
+   - Should be noticeably different
+
+
+PART 10: REPORT RESULT
+════════════════════════════════════════════════════════════════════════════════
+
+IF VALUES CHANGED (jumped when speaking/clapping):
+   Report: "MIC PASS - RMS jumped from 42 to 250 when speaking"
+
+IF VALUES STAYED AT ~0:
+   Report: "MIC FAIL - Serial shows only small values even when speaking"
+
+IF YOU SEE ERROR MESSAGE:
+   Report: Copy the error message exactly and send it
+
+
+════════════════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════════
+
+Problem: "Arduino IDE says 'Board not found'"
+Solution:
+  - Go to Tools → Board → Boards Manager
+  - Search "esp32" and install if not already installed
+  - Try again
+
+Problem: "Upload says 'Port not found'"
+Solution:
+  - Unplug USB, wait 2 seconds
+  - Plug back in
+  - Tools → Port (select COMx again)
+  - Try upload again
+
+Problem: "Serial Monitor shows garbage text"
+Solution:
+  - Bottom-right shows baud rate
+  - Click and select 9600
+  - Baud rate must match 9600 in code
+
+Problem: "Microphone test shows only zeros"
+Solution:
+  - Check wiring per WIRING_STEPS_SIMPLE.txt
+  - Verify GPIO 4, 5, 6 are correct
+  - Verify L/R and GND are both in same rail
+  - Try different USB cable
+  - Check INMP441 has power (look for small LED)
+
+Problem: "Arduino IDE won't let me select ESP32-S3 board"
+Solution:
+  - Tools → Board → Boards Manager
+  - Reinstall esp32 package
+  - Restart Arduino IDE
+  - Try again
+
+
+════════════════════════════════════════════════════════════════════════════════
+QUICK REFERENCE: THESE SETTINGS MUST MATCH
+════════════════════════════════════════════════════════════════════════════════
+
+Board:              ESP32-S3 Dev Module
+Port:               COMx (where ESP32 is connected)
+Upload Speed:       921600 (or 460800 if problems)
+Baud Rate (Monitor):9600
+Partition Scheme:   Default (or Minimal SPIFFS)
+
+
+════════════════════════════════════════════════════════════════════════════════
+YOU'RE READY!
+════════════════════════════════════════════════════════════════════════════════
+
+Next actions:
+
+1. ✓ Complete hardware wiring (Task #2)
+2. → Flash firmware (Task #3 - follow this guide)
+3. → Test microphone (Task #4)
+4. → Report result (Task #5)
+
+Then while training finishes: hardware test complete!
+
+Good luck! 🚀
+
+════════════════════════════════════════════════════════════════════════════════

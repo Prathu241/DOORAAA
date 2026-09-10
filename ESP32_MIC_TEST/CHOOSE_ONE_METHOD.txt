@@ -1,0 +1,181 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║              USB DRIVER ISSUE - CHOOSE ONE WORKAROUND                        ║
+║                 Arduino IDE method failed. Try alternatives.                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+STATUS
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Code compiles perfectly (292 KB)
+✗ Arduino IDE USB upload hangs ("Write timeout")
+→ SOLUTION: Use web flasher or command line instead
+
+
+THREE OPTIONS - PICK ONE
+════════════════════════════════════════════════════════════════════════════════
+
+
+OPTION A: WEB FLASHER (Easiest - No install needed)
+────────────────────────────────────────────────────
+
+Requirements: Chrome or Edge browser
+
+Steps:
+  1. Arduino IDE: Sketch → Export Compiled Binary
+  2. Arduino IDE: Sketch → Show Sketch Folder
+  3. Find: mic_test.ino.esp32s3.bin (copy path)
+  4. Open Chrome/Edge
+  5. Go to: https://espressif.github.io/esptool-js/
+  6. Click "Connect" → Select COM3
+  7. Click "Choose file" → Select .bin file
+  8. Click "Program"
+  9. Wait for "Finished successfully"
+
+Time: 3 minutes
+Success rate: 80%+ (often works when Arduino IDE fails)
+
+
+OPTION B: COMMAND LINE (Most reliable)
+──────────────────────────────────────
+
+Requirements: esptool installed
+
+Setup (one-time):
+  1. Open PowerShell
+  2. Run: pip install esptool
+  3. Wait for completion
+
+Flash:
+  1. Arduino IDE: Sketch → Export Compiled Binary
+  2. Arduino IDE: Sketch → Show Sketch Folder (note path)
+  3. Go to ESP32_MIC_TEST folder in PowerShell
+  4. Run: esptool.py -p COM3 -b 921600 --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0x0 "mic_test.ino.esp32s3.bin"
+  5. Wait for completion
+
+Time: 5 minutes
+Success rate: 95%+ (very reliable)
+
+
+OPTION C: USE PROVIDED BATCH FILE (Windows only)
+─────────────────────────────────────────────────
+
+Requirements: esptool installed, .bin file in same folder
+
+Setup:
+  1. Install esptool: pip install esptool
+  2. Arduino IDE: Sketch → Export Compiled Binary
+  3. Copy .bin file to: c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+  4. Run: c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\flash_via_cli.bat
+
+Time: 3 minutes
+Success rate: 90%+
+
+
+MY RECOMMENDATION
+════════════════════════════════════════════════════════════════════════════════
+
+Start with OPTION A (Web Flasher):
+  ✓ No installation
+  ✓ Usually works when Arduino IDE fails
+  ✓ Easiest to troubleshoot
+
+If Option A doesn't work:
+  → Try OPTION B (Command line)
+  → More reliable, shows detailed output
+
+
+DETAILED STEPS FOR OPTION A (WEB FLASHER)
+════════════════════════════════════════════════════════════════════════════════
+
+Step 1: Create Binary File
+──────────────────────────
+In Arduino IDE:
+  1. Sketch → Export Compiled Binary
+     (Wait 10 seconds for file to generate)
+  2. Sketch → Show Sketch Folder
+     (File browser opens)
+  3. Find file ending in .esp32s3.bin
+  4. Note its full path (for reference)
+
+Step 2: Connect to Web Flasher
+─────────────────────────────
+Open Chrome or Edge browser:
+  1. Visit: https://espressif.github.io/esptool-js/
+  2. Page loads with flasher interface
+  3. Click blue "Connect" button (top right)
+  4. Browser dialog appears asking for serial port
+  5. Select "COM3"
+  6. Click "Connect"
+
+Step 3: Select Binary
+────────────────────
+  1. Click "Choose file" button
+  2. Navigate to mic_test.ino.esp32s3.bin
+  3. Select it
+  4. Browser shows file name
+
+Step 4: Program
+──────────────
+  1. Click "Program" button
+  2. Progress bar appears
+  3. Wait for "Finished successfully" message
+     (Usually takes 30-60 seconds)
+
+Step 5: Done!
+────────────
+If you see "Finished successfully":
+  ✓ Firmware is now on ESP32-S3
+  → Go to Serial Monitor test (see below)
+
+
+AFTER SUCCESSFUL FLASH - MICROPHONE TEST
+════════════════════════════════════════════════════════════════════════════════
+
+1. Arduino IDE: Tools → Serial Monitor
+
+2. Set baud rate: 9600 (bottom-right dropdown)
+
+3. Wait for initialization messages
+
+4. You should see:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+   ✓ I2S initialized successfully!
+   Listening for audio...
+
+5. Speak "DORA" clearly into microphone for 5 seconds
+
+6. Watch Serial Monitor output:
+
+   MIC TEST
+   samples=8000
+   rms=250      ← Should JUMP from ~40
+   peak=800     ← Should JUMP from ~100
+   min=-500
+   max=600
+   ---
+
+7. Report:
+   ✅ "MIC PASS - RMS jumped to 250, peak to 800"
+   ❌ "MIC FAIL - Values stayed at rms=40, peak=100"
+
+
+IF WEB FLASHER FAILS
+════════════════════════════════════════════════════════════════════════════════
+
+Error: "Failed to connect"
+  → Unplug USB, wait 3 sec, plug back in, refresh page, try again
+
+Error: "Write error"
+  → Try OPTION B (command line) instead
+
+Error: "Unsupported device"
+  → Check if COM3 is the right port (Device Manager)
+  → Try different USB port, select new COM number
+
+
+═══════════════════════════════════════════════════════════════════════════════
+START: Choose OPTION A (Web Flasher) and follow 5 steps above!
+═══════════════════════════════════════════════════════════════════════════════

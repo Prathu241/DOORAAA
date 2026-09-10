@@ -1,0 +1,137 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║              BYPASS USB DRIVER ISSUE - USE WEB FLASHER                       ║
+║                  (Works in Chrome/Edge, no drivers needed)                    ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+WHY THIS WORKS
+════════════════════════════════════════════════════════════════════════════════
+
+Arduino IDE's USB driver: Having issues
+Web Flasher: Uses browser's native USB access
+Result: Often more reliable
+
+
+STEP 1: BUILD THE BINARY (In Arduino IDE)
+════════════════════════════════════════════════════════════════════════════════
+
+1. Arduino IDE: Sketch → Export Compiled Binary
+
+2. Wait for completion
+
+3. Find the .bin file:
+   Sketch → Show Sketch Folder
+
+4. You'll see:
+   mic_test.ino.esp32s3.bin  ← THIS FILE
+
+5. Copy full path to this file
+
+
+STEP 2: USE WEB FLASHER
+════════════════════════════════════════════════════════════════════════════════
+
+1. Open Chrome or Edge browser
+
+2. Go to: https://espressif.github.io/esptool-js/
+
+3. Click "Connect" button (top right)
+
+4. A popup appears asking for serial port
+   → Select COM3 (your ESP32)
+   → Click Connect
+
+5. Click "Choose file" and select:
+   mic_test.ino.esp32s3.bin
+
+6. Settings should show:
+   - Address: 0x1000
+   - Baud: 921600
+
+7. Click "Program" button
+
+8. Wait for completion (should say "Finished successfully")
+
+
+WHAT IF BROWSER CAN'T FIND COM3?
+════════════════════════════════════════════════════════════════════════════════
+
+Try these:
+
+1. Unplug USB, wait 2 sec, plug back in
+2. Refresh browser (F5)
+3. Click "Connect" again
+4. Select COM3
+
+If still doesn't work:
+  - Try Microsoft Edge instead of Chrome
+  - Restart browser
+  - Check Device Manager (should see COM3 listed)
+
+
+AFTER SUCCESSFUL FLASH
+════════════════════════════════════════════════════════════════════════════════
+
+Web flasher will say:
+  "Finished successfully"
+
+Then:
+
+1. Arduino IDE: Tools → Serial Monitor
+
+2. Set baud to 9600
+
+3. Should see:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+
+
+QUICK STEPS SUMMARY
+════════════════════════════════════════════════════════════════════════════════
+
+Arduino IDE:
+  Sketch → Export Compiled Binary
+  Sketch → Show Sketch Folder
+  [Copy path to .bin file]
+
+Browser (Chrome/Edge):
+  https://espressif.github.io/esptool-js/
+  Click "Connect" → Select COM3
+  Click "Choose file" → Select .bin file
+  Click "Program" → Wait for success
+
+Serial Monitor:
+  Tools → Serial Monitor (9600 baud)
+  Speak "DORA" into mic
+  Report if RMS/peak values jump
+
+
+ALTERNATIVE: DIRECT COMMAND LINE
+════════════════════════════════════════════════════════════════════════════════
+
+If web flasher also fails, use command line:
+
+1. Install esptool:
+   pip install esptool
+
+2. Find your .bin file path (from Step 1 above)
+
+3. Open PowerShell:
+   esptool.py -p COM3 -b 921600 --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0x0 "C:\path\to\mic_test.ino.esp32s3.bin"
+
+4. If first fails, try slower speed:
+   esptool.py -p COM3 -b 115200 --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0x0 "C:\path\to\mic_test.ino.esp32s3.bin"
+
+
+TRY IN THIS ORDER
+════════════════════════════════════════════════════════════════════════════════
+
+1. First: Web Flasher (easiest)
+2. Second: Command line (more reliable)
+3. Third: Report if both fail (might be hardware issue)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Start with Web Flasher - usually works! ✓
+═══════════════════════════════════════════════════════════════════════════════

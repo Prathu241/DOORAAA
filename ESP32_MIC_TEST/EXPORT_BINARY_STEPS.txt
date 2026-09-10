@@ -1,0 +1,139 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║               EXPORT BINARY FROM ARDUINO IDE - STEP BY STEP                  ║
+║                      (Detailed screenshot-style guide)                        ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+STEP 1: OPEN ARDUINO IDE
+════════════════════════════════════════════════════════════════════════════════
+
+1. Launch Arduino IDE (if not already open)
+
+2. Open your sketch:
+   File → Open Recent → mic_test
+   (or File → Open → navigate to mic_test.ino)
+
+3. Verify you see the code (should have lots of #include statements)
+
+
+STEP 2: COMPILE THE SKETCH
+════════════════════════════════════════════════════════════════════════════════
+
+1. Click: Sketch → Verify/Compile
+   (or press Ctrl+R)
+
+2. Wait for compilation to complete (~30 seconds)
+
+3. Bottom of Arduino IDE should show:
+   "Sketch uses 292973 bytes..."
+   "Compilation completed"
+
+
+STEP 3: EXPORT COMPILED BINARY
+════════════════════════════════════════════════════════════════════════════════
+
+1. Click: Sketch → Export Compiled Binary
+   
+2. You'll see progress message:
+   "Exporting compiled file to..."
+   "Export Succeeded"
+
+3. This creates a .bin file in the sketch folder
+
+
+STEP 4: LOCATE THE BINARY FILE
+════════════════════════════════════════════════════════════════════════════════
+
+1. Click: Sketch → Show Sketch Folder
+   (Opens Windows File Explorer)
+
+2. You should see files including:
+   - mic_test.ino (the source code)
+   - mic_test.ino.esp32s3.bin ← THIS ONE (the binary)
+   - Other files
+
+3. Note the file path shown in the address bar
+
+
+STEP 5: COPY BINARY TO TARGET FOLDER
+════════════════════════════════════════════════════════════════════════════════
+
+1. Right-click on: mic_test.ino.esp32s3.bin
+   Select: Copy
+
+2. Navigate to:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+
+   (You can paste this path in address bar and press Enter)
+
+3. Right-click in empty space
+   Select: Paste
+
+4. Verify the file is now here:
+   mic_test.ino.esp32s3.bin
+
+
+STEP 6: VERIFY FILE EXISTS
+════════════════════════════════════════════════════════════════════════════════
+
+1. In Windows Explorer, navigate to:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+
+2. You should see:
+   - mic_test.ino (the source)
+   - mic_test.ino.esp32s3.bin (the binary) ← MUST EXIST
+
+3. Right-click on .bin file → Properties
+   Should show: File size around 290-300 KB
+
+
+IF YOU CAN'T FIND THE FILE
+════════════════════════════════════════════════════════════════════════════════
+
+Check these common locations:
+
+Location 1 (Most likely):
+  C:\Users\PRATHAM\OneDrive\ドキュメント\Arduino\mic_test\
+
+Location 2:
+  C:\Users\PRATHAM\Documents\Arduino\mic_test\
+
+Location 3:
+  C:\Users\PRATHAM\AppData\Local\Temp\
+
+Search for it:
+  Open Windows Explorer
+  Search for: "mic_test.ino.esp32s3.bin"
+  (Should find it in 10 seconds)
+
+
+QUICK VERIFICATION
+════════════════════════════════════════════════════════════════════════════════
+
+After copying the file, verify in PowerShell:
+
+cd c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+Get-ChildItem *.bin
+
+You should see:
+  mic_test.ino.esp32s3.bin (with file size ~292 KB)
+
+If you see it: ✓ Ready to flash!
+
+
+THEN RUN FLASH SCRIPT
+════════════════════════════════════════════════════════════════════════════════
+
+Once .bin file is copied:
+
+1. Open PowerShell in ESP32_MIC_TEST folder
+
+2. Run:
+   .\FLASH_SIMPLE.ps1
+
+3. Script should find the .bin file and flash
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Follow these steps carefully and you'll have the binary ready! ✓
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,150 @@
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                    DORA KWS DASHBOARD - LAYOUT                                                 ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                 HEADER                                                           ┃
+┃  🎤 DORA KWS                              Real-Time Keyword Spotting Dashboard           [●] Training Active    ┃
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+
+┌─────────────────────┬─────────────────────┬─────────────────────┬─────────────────────────────────────────┐
+│  TRAINING STEP      │  ACCURACY           │  RECALL             │              HARDWARE STATUS            │
+│  ┌────────────────┐ │  ┌────────────────┐ │  ┌────────────────┐ │  📱 ESP32-S3              [●] Connected │
+│  │     2400       │ │  │     99.4%      │ │  │     97.3%      │ │  Port: COM3, Temp: 32°C               │
+│  └────────────────┘ │  │ ▓▓▓▓▓▓▓▓▓░░░░  │ │  │ ▓▓▓▓▓▓▓▓░░░░  │ │  [CONNECT]                             │
+└─────────────────────┴─────────────────────┴─────────────────────┤  🎤 INMP441              [●] Testing    │
+│  PRECISION          │  LOSS               │  BATCH #            │  Signal: ▓▓▓▓▓░░░░░░░░░░░░░░░░░░ 42%  │
+│  ┌────────────────┐ │  ┌────────────────┐ │  ┌────────────────┐ │  ⚙️ FIRMWARE v1.0.0                     │
+│  │     98.2%      │ │  │    0.0168      │ │  │      412       │ │  Last Update: 14:32:45                  │
+│  │ ▓▓▓▓▓▓▓▓░░░░  │ │  │ (green glow)   │ │  │                │ │                                         │
+│  └────────────────┘ │  └────────────────┘ │  └────────────────┘ │                                         │
+└─────────────────────┴─────────────────────┴─────────────────────┴─────────────────────────────────────────┘
+
+┌─────────────────────────────────────────┬─────────────────────────────────────────────────────────────────┐
+│        AUDIO WAVEFORM                   │                  KEYWORD DETECTIONS                            │
+│  ┌───────────────────────────────────┐  │  ┌────────────────────────────────────────────────────────┐  │
+│  │                                   │  │  │  [DORA] 92.3%                                       │  │
+│  │      ╱╲     ╱╲    ╱╲               │  │  │  RMS: 65.4  [14:32:45]                              │  │
+│  │    ╱    ╲  ╱   ╲╱   ╲              │  │  │  ▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  │
+│  │  ─────────────────────────────    │  │  │                                                     │  │
+│  │    ╲    ╱  ╲   ╱╲    ╱            │  │  │  [DORA] 88.7%                                       │  │
+│  │      ╲╱     ╲╱    ╲╱               │  │  │  RMS: 58.2  [14:31:15]                              │  │
+│  │                                   │  │  │  ▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  │
+│  │                                   │  │  │                                                     │  │
+│  │  RMS: 45.2   Peak: 92   Freq:16kHz │  │  │  [DORA] 95.1%                                       │  │
+│  └───────────────────────────────────┘  │  │  RMS: 72.1  [14:30:45]                              │  │
+└─────────────────────────────────────────┴─────▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  │
+                                                 └────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                              MODEL PERFORMANCE METRICS                                                   │
+│  ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐   │
+│  │ 100% ├─╮      ╭─────────────────────────────────                                               │   │
+│  │      │  ╰─────╯                                                                               │   │
+│  │  90% ├─────┬────╮                                                                             │   │
+│  │      │     │    │                                                                            │   │
+│  │  80% ├─────┤    ├─────────────────────────────                                              │   │
+│  │      │     │    │                                                                            │   │
+│  │  70% ├─────┴────┴──────────────────────────────                                             │   │
+│  │      │                                                                                       │   │
+│  │   0% └──────────────────────────────────────────────────────────────────────────────────────    │   │
+│  │      0  5 10 15 20 25 30 35 40 45 50                                                       │   │
+│  │      ───────── Accuracy (Cyan)  ─────────── Recall (Green)  ─────────── Precision (Magenta) │   │
+│  └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                            DEPLOYMENT PIPELINE                                                      │
+│                                                                                                     │
+│  ✓ ● 📊 Dataset Prep ────────────────┐                                                            │
+│    Audio collection & labeling        │                                                            │
+│                                       │                                                            │
+│  ✓ ◉ 🧠 Training (ACTIVE) ─────────┐ │                                                            │
+│    Model optimization                 │ │  ← Glowing Cyan Dot with Pulse Animation                │
+│                                       │ │                                                         │
+│  ○ ● ⚡ Quantization ────────────────┤─┘                                                         │
+│    Int8 compression                   │                                                            │
+│                                       │                                                            │
+│  ○ ● 📱 Hardware Test ──────────────┤                                                            │
+│    Microphone validation              │                                                            │
+│                                       │                                                            │
+│  ○ ● 🔧 KWS Integration ───────────┤                                                            │
+│    Firmware deployment                │                                                            │
+│                                       │                                                            │
+│  ○ ● 🎯 Live Demo ─────────────────┘                                                            │
+│    Real-time detection                                                                            │
+│                                                                                                     │
+│  Legend: ✓ = Completed (Green)  ◉ = Active (Cyan, Glowing)  ○ = Pending (Gray)                   │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  FOOTER                                                                                           ┃
+┃  DORA MixedNet KWS • ESP32-S3 + INMP441 • 4-Hour Deployment Sprint    Training for: 145 minutes  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+RESPONSIVE BEHAVIOR:
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+
+Desktop (1600px+)
+  - 6 metric cards in top row (2-3 columns)
+  - Hardware + Audio + Detection in right column
+  - Chart (wide) spanning bottom
+  - Timeline below chart
+
+Tablet (768px - 1200px)
+  - 4 column grid, cards wrap
+  - All components full width or half width
+  - Detection log below everything
+  - Optimized touch size
+
+Mobile (< 768px)
+  - Single column
+  - Full-width cards
+  - Larger buttons and spacing
+  - Vertical scrolling only
+
+
+COLOR SCHEME:
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+
+Primary Accent:    #00d4ff (Bright Cyan) ━━━━━━━━━━
+Secondary:         #ff006e (Magenta) ───────────
+Accent:            #7209b7 (Purple) ██████████
+Success:           #10b981 (Green) ──────────
+Warning:           #f59e0b (Orange) ░░░░░░░░
+Error:             #ef4444 (Red) ████████
+Background:        #0a0e27 (Very Dark Blue)
+Card Background:   #1a1f3a (Dark Blue)
+Text Primary:      #e0e0e0 (Light Gray)
+Text Secondary:    #a0a0a0 (Medium Gray)
+
+
+ANIMATIONS:
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+
+Fade In:           0.5s ease-in-out (on component mount)
+Hover:             0.3s ease (card lift, glow)
+Pulse:             2s infinite (active indicators)
+Transitions:       0.3s cubic-bezier(0.4, 0, 0.6, 1)
+Chart Updates:     Smooth every 3 seconds
+Waveform:          Updated every 100ms
+
+
+INTERACTIVE ELEMENTS:
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+
+Metric Cards:      Color-coded (green=excellent, yellow=fair, red=poor)
+Hardware Status:   Connect/disconnect button, glowing dots for active devices
+Chart:             Interactive hover tooltips, legend clickable
+Timeline:          Phase completion indicators, active phase glow
+Detection Log:     Auto-scroll, newest events appear at top
+All Buttons:       Hover lift effect, gradient background
+
+
+ACCESS:
+═══════════════════════════════════════════════════════════════════════════════════════════════════
+
+Local:             http://localhost:5000
+Network:           http://<your-computer-ip>:5000
+Development:       http://localhost:5173 (with npm run dev)

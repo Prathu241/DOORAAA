@@ -1,0 +1,133 @@
+.metric-card {
+  background: rgba(26, 31, 58, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.metric-card:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.metric-card:hover::before {
+  opacity: 1;
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a0a0a0;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.metric-unit {
+  font-size: 12px;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+.metric-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.metric-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* Color variants */
+.metric-primary {
+  --primary: #00d4ff;
+  --accent: #7209b7;
+}
+
+.metric-secondary {
+  --primary: #ff006e;
+  --accent: #00d4ff;
+}
+
+.metric-success {
+  --primary: #10b981;
+  --accent: #00d4ff;
+}
+
+.metric-warning {
+  --primary: #f59e0b;
+  --accent: #ff006e;
+}
+
+.metric-excellent .metric-value {
+  color: #10b981;
+}
+
+.metric-good .metric-value {
+  background: linear-gradient(135deg, #10b981, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.metric-fair .metric-value {
+  background: linear-gradient(135deg, #f59e0b, #ff006e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.metric-poor .metric-value {
+  color: #ef4444;
+}
+
+.metric-excellent .metric-fill {
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.metric-good .metric-fill {
+  background: linear-gradient(90deg, #06b6d4, #10b981);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.metric-warning .metric-fill {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}

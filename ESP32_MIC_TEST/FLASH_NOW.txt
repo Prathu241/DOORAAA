@@ -1,0 +1,116 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    FLASH CORRECTED FIRMWARE - NOW!                           ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+✅ CODE IS NOW FIXED
+════════════════════════════════════════════════════════════════════════════════
+
+The compilation error is FIXED. The issue was:
+  Line 58: .communication_format = (i2s_comm_format_t)(I2S_COMM_FORMAT_I2S)
+
+This version is compatible with all ESP32 Arduino library versions.
+
+
+COPY CORRECTED CODE NOW
+════════════════════════════════════════════════════════════════════════════════
+
+1. Open file:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\mic_test.ino
+
+2. Select ALL (Ctrl+A) and Copy (Ctrl+C)
+
+3. In Arduino IDE:
+   - Select ALL (Ctrl+A)
+   - Delete
+   - Paste (Ctrl+V)
+
+4. File → Save
+
+
+UPLOAD FIRMWARE
+════════════════════════════════════════════════════════════════════════════════
+
+In Arduino IDE:
+
+1. Sketch → Upload   (or Ctrl+U)
+
+2. Watch for progress bar
+
+3. Wait for message:
+   "Leaving... Hard resetting via RTS pin"
+
+4. Then it says:
+   "Upload successful!" or similar
+
+
+OPEN SERIAL MONITOR
+════════════════════════════════════════════════════════════════════════════════
+
+After upload completes:
+
+1. Tools → Serial Monitor
+
+2. Bottom-right: Set baud rate to 9600
+
+3. You should see:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+   ✓ I2S initialized successfully!
+   Listening for audio...
+
+
+TEST MICROPHONE
+════════════════════════════════════════════════════════════════════════════════
+
+In Serial Monitor, you should see repeating output:
+
+  MIC TEST
+  samples=8000
+  rms=42.5
+  peak=110
+  min=-95
+  max=105
+  ---
+
+Now TEST IT:
+
+1. SILENT (5 sec):
+   Don't make any sound
+   Values should stay small (rms ~30-50, peak ~50-100)
+
+2. SPEAK "DORA" (5 sec):
+   Speak clearly into microphone
+   Values should JUMP UP
+   rms should go from 40 → 150-300+
+   peak should go from 100 → 400-800+
+
+3. RESULT:
+   If values CHANGED clearly → "MIC PASS"
+   If values stayed the same → "MIC FAIL"
+
+
+REPORT BACK
+════════════════════════════════════════════════════════════════════════════════
+
+Tell me:
+
+Option A (Success):
+  "MIC PASS - RMS jumped from 45 to 250, peak from 110 to 600"
+
+Option B (Failure):
+  "MIC FAIL - Values stayed at rms~40 peak~100 even when speaking"
+
+Option C (Error):
+  Copy any error message you see
+
+
+YOU'RE READY!
+════════════════════════════════════════════════════════════════════════════════
+
+This is the final flash before the microphone test.
+
+Start now! ✓
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,94 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    EXPORT BINARY NOW - 2 MINUTES                             ║
+║                  (Simple, exact, no confusion)                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+YOU NEED TO DO THIS IN ARDUINO IDE:
+════════════════════════════════════════════════════════════════════════════════
+
+1. Make sure Arduino IDE is open with mic_test.ino sketch loaded
+
+2. In menu bar, click:
+   Sketch
+   
+3. Look for option:
+   Export Compiled Binary
+   
+4. Click it
+
+5. Wait 15-20 seconds
+
+6. You'll see message like:
+   "Export Succeeded"
+
+
+THEN: FIND THE FILE
+════════════════════════════════════════════════════════════════════════════════
+
+After export succeeds:
+
+1. In Arduino IDE menu, click:
+   Sketch
+
+2. Select:
+   Show Sketch Folder
+
+3. Windows File Explorer opens
+
+4. Look for file:
+   mic_test.ino.esp32s3.bin
+   
+   (Should be ~292 KB)
+
+
+THEN: COPY TO FLASH FOLDER
+════════════════════════════════════════════════════════════════════════════════
+
+1. Right-click the .bin file
+   Copy
+
+2. Paste address in address bar:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+   
+3. Press Enter
+
+4. Right-click empty space
+   Paste
+
+5. Done! File is now copied
+
+
+VERIFY
+════════════════════════════════════════════════════════════════════════════════
+
+In PowerShell:
+
+cd c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+dir *.bin
+
+You should see:
+  mic_test.ino.esp32s3.bin
+
+
+THEN FLASH
+════════════════════════════════════════════════════════════════════════════════
+
+.\FLASH_SIMPLE.ps1
+
+Script will flash automatically.
+
+
+IF YOU'RE STUCK
+════════════════════════════════════════════════════════════════════════════════
+
+Send me a screenshot of:
+  1. Arduino IDE menu (so I can see the exact Sketch menu options)
+  2. Or let me know if "Export Compiled Binary" option exists
+
+Then I can give exact next steps.
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Go to Arduino IDE now and click: Sketch → Export Compiled Binary
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,201 @@
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                    EXACT WIRING - YOUR ESP32-S3 SETUP                      ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+
+INMP441 MODULE - PIN IDENTIFICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Looking at the FLAT SIDE of your circular INMP441 (where text is printed):
+
+        TOP-LEFT                    TOP-RIGHT
+        ┌──────────┐                ┌──────────┐
+        │   GND    │ ─ pin 1        │   VCC    │ ─ pin 6
+        │  (black) │                │  (red)   │
+        │          │                │          │
+        │   L/R    │ ─ pin 2        │   WS     │ ─ pin 5
+        │  (to GND)│                │  (green) │
+        │          │                │          │
+        │   SCK    │ ─ pin 3        │   SD     │ ─ pin 4
+        │ (yellow) │                │  (blue)  │
+        └──────────┘                └──────────┘
+        LEFT SIDE                    RIGHT SIDE
+
+
+BREADBOARD LAYOUT
+═══════════════════════════════════════════════════════════════════════════════
+
+Your breadboard (640 holes, 2×320 pattern):
+
+     ┌───────── POWER RAIL TOP ─────────┬─────────── POWER RAIL TOP ────────┐
+     │ [+] [+] [+] [+] [+] [+] [+]      │ [+] [+] [+] [+] [+] [+] [+]       │
+     ├───────── SIGNAL ROWS ────────────┼────────── SIGNAL ROWS ────────────┤
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     │                                  │ ▲                                  │
+     │                                  │ ESP32-S3 plugged here              │
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     │                                  │                                    │
+     │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]  ... │ [ ] [ ] [ ] [ ] [ ] [ ] [ ]       │
+     ├───────── GROUND RAIL BOT ────────┼───────── GROUND RAIL BOT ─────────┤
+     │ [-] [-] [-] [-] [-] [-] [-]      │ [-] [-] [-] [-] [-] [-] [-]       │
+     └────────────────────────────────────────────────────────────────────────┘
+
+     LEFT SIDE: INMP441 microphone                RIGHT SIDE: ESP32-S3
+
+
+ESP32-S3 DEVKIT PIN LOCATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+TOP SIDE (near USB):
+  [GND] [GND] [GND] | [3V3] [EN] [BOOT] [GP45] [GP46] [GP0] [GP1] ...
+
+BOTTOM SIDE (power pins visible):
+  ... [GP21] [GP20] [GP19] [GP18] [GP17] [GP16] | [GND] [5V] [GND] [3V3]
+
+YOUR PINS NEEDED:
+  ✓ 3V3   (3.3V) - TOP side, left area
+  ✓ GND   (multiple) - TOP and BOTTOM sides
+  ✓ GPIO 4 - LEFT side pin row
+  ✓ GPIO 5 - LEFT side pin row
+  ✓ GPIO 6 - LEFT side pin row
+
+
+STEP-BY-STEP WIRING (Color-Coded)
+═══════════════════════════════════════════════════════════════════════════════
+
+Wire 1: RED (3.3V Power)
+────────────────────────────────────────
+  ESP32-S3 [3V3] --RED--> Breadboard [+] rail
+                            ↓
+                      INMP441 VCC (pin 6)
+  
+  Action: Plug RED into ESP32 3V3, route to top-left [+] rail,
+          Connect INMP441 VCC into same rail
+
+  Safety: Check - no shorts, RED not touching BLACK
+
+
+Wire 2 & 3: BLACK (Ground - 2 wires!)
+────────────────────────────────────────
+  Wire 2a:
+  ESP32-S3 [GND] --BLACK--> Breadboard [-] rail
+                              ↓
+                        INMP441 GND (pin 1)
+  
+  Wire 2b:
+  [same GND rail] --BLACK--> INMP441 L/R (pin 2)
+  
+  Action: Plug BLACK #1 into ESP32 GND, route to bottom-left [-] rail
+          From [-] rail, run separate BLACK #2 to INMP441 GND (pin 1)
+          From [-] rail, run separate BLACK #3 to INMP441 L/R (pin 2)
+  
+  Safety: Check - L/R is BOTH connected to GND (CRITICAL for mono mode!)
+
+
+Wire 4: YELLOW (GPIO 4 → SCK Bit Clock)
+────────────────────────────────────────
+  ESP32-S3 [GPIO 4] --YELLOW--> INMP441 SCK (pin 3)
+  
+  Action: Plug YELLOW into GPIO 4 (left side, labeled "4")
+          Route directly to INMP441 SCK (pin 3)
+
+
+Wire 5: GREEN (GPIO 5 → WS Word Select)
+────────────────────────────────────────
+  ESP32-S3 [GPIO 5] --GREEN--> INMP441 WS (pin 5)
+  
+  Action: Plug GREEN into GPIO 5 (left side, labeled "5")
+          Route directly to INMP441 WS (pin 5)
+
+
+Wire 6: BLUE (GPIO 6 → SD Data In)
+────────────────────────────────────────
+  ESP32-S3 [GPIO 6] --BLUE--> INMP441 SD (pin 4)
+  
+  Action: Plug BLUE into GPIO 6 (left side, labeled "6")
+          Route directly to INMP441 SD (pin 4)
+
+
+FINAL CHECKLIST BEFORE POWERING
+═══════════════════════════════════════════════════════════════════════════════
+
+[ ] RED wire: 3V3 → [+] rail → INMP441 VCC (pin 6)
+[ ] BLACK wire #1: GND → [-] rail → INMP441 GND (pin 1)
+[ ] BLACK wire #2: GND → [-] rail → INMP441 L/R (pin 2)
+[ ] YELLOW wire: GPIO 4 → INMP441 SCK (pin 3)
+[ ] GREEN wire: GPIO 5 → INMP441 WS (pin 5)
+[ ] BLUE wire: GPIO 6 → INMP441 SD (pin 4)
+
+Safety:
+[ ] RED and BLACK do not touch
+[ ] No loose connections (all wires firmly in holes)
+[ ] All INMP441 pins are seated properly
+[ ] No bent pins on INMP441
+[ ] Breadboard has clean surface (no dust/corrosion)
+
+
+THEN: Plug USB cable into ESP32-S3
+
+
+AFTER FLASHING FIRMWARE - SERIAL MONITOR OUTPUT
+═══════════════════════════════════════════════════════════════════════════════
+
+Expected:
+  =====================================================
+  DORA MICROPHONE TEST - ESP32-S3 + INMP441
+  =====================================================
+  ✓ I2S initialized successfully!
+  Listening for audio... Speak or clap near microphone!
+  
+  MIC TEST
+  samples=8000
+  rms=42.5
+  peak=115
+  min=-95
+  max=108
+  ---
+  
+  MIC TEST
+  samples=16000
+  rms=48.2
+  peak=120
+  min=-100
+  max=112
+  ---
+
+When speaking:
+  MIC TEST
+  samples=24000
+  rms=245.7        ← JUMPED from 48
+  peak=820         ← JUMPED from 120
+  min=-650
+  max=680
+  ---
+
+
+WHAT EACH METRIC MEANS
+═══════════════════════════════════════════════════════════════════════════════
+
+rms       = Root Mean Square (overall volume) - higher = louder
+peak      = Loudest single sample - shows sudden spikes
+min       = Most negative value - shows bass/depth
+max       = Most positive value - shows peaks
+
+
+✓ MIC WORKING when:
+  - Values change from ~40-50 (silence) → 200-300+ (speaking)
+  - Peak shows clear spikes when clapping
+  - Patterns are consistent across measurements
+
+✗ MIC NOT WORKING when:
+  - All zeros all the time
+  - Values stuck at same number
+  - Errors in Serial Monitor
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Ready to wire? Let's go! 🎤🔧
+═══════════════════════════════════════════════════════════════════════════════

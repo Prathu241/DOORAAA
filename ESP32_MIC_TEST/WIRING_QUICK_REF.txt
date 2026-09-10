@@ -1,0 +1,90 @@
+================================================================================
+DORA MICROPHONE TEST - QUICK WIRING REFERENCE
+ESP32-S3 + INMP441 I2S Digital Microphone
+================================================================================
+
+INMP441 PIN ASSIGNMENTS (Typical Module Layout):
+┌─────────────────────────────┐
+│  INMP441 Module (Top View)  │
+├─────────────────────────────┤
+│  [1] VCC  → 3.3V Power      │
+│  [2] GND  → Ground          │
+│  [3] L/R  → Ground (Mono)   │
+│  [4] WS   → GPIO 5 (LRCK)   │
+│  [5] SCK  → GPIO 4 (BCLK)   │
+│  [6] SD   → GPIO 6 (DIN)    │
+└─────────────────────────────┘
+
+BREADBOARD WIRING DIAGRAM:
+
+ESP32-S3 Side            Breadboard         INMP441 Side
+──────────────          ──────────────      ────────────
+3.3V      ───────────→  [+] Rail      ←──→ [1] VCC
+GND       ───────────→  [-] Rail      ←──→ [2] GND
+GPIO 4    ───────────→  Row 4               [5] SCK
+GPIO 5    ───────────→  Row 5               [4] WS
+GPIO 6    ───────────→  Row 6               [6] SD
+GND       ───────────→  [-] Rail      ←──→ [3] L/R
+
+CONNECTIONS CHECKLIST:
+☐ INMP441 VCC (pin 1) → ESP32-S3 3.3V
+☐ INMP441 GND (pin 2) → ESP32-S3 GND  
+☐ INMP441 L/R (pin 3) → ESP32-S3 GND (sets mono mode)
+☐ INMP441 WS (pin 4) → ESP32-S3 GPIO 5 (word select)
+☐ INMP441 SCK (pin 5) → ESP32-S3 GPIO 4 (bit clock)
+☐ INMP441 SD (pin 6) → ESP32-S3 GPIO 6 (data in)
+☐ Check all connections twice
+☐ Verify no loose wires
+☐ Verify no shorts (especially 3.3V ↔ GND)
+
+OPTIONAL IMPROVEMENTS:
+• Add 0.1 µF capacitor between VCC and GND (noise filtering)
+• Add 47 Ω resistor on SCK line (impedance matching)
+• Use shielded cables for GPIO 4, 5, 6 (reduces noise)
+
+TESTING WITHOUT SOLDERING:
+• Use female-female breadboard jumper cables (DuPont connectors)
+• Keep cables organized (bundle with velcro or tape)
+• Double-check polarity on INMP441 module markings
+
+POWER NOTES:
+• INMP441 draws ~1.3 mA (OK from ESP32-S3 3.3V regulator)
+• Verify USB power supply provides 500+ mA
+• If powering from USB directly on ESP32-S3, should be fine
+
+EXPECTED BEHAVIOR AFTER WIRING:
+✓ Upload mic_test.ino to ESP32-S3
+✓ Open serial monitor (9600 baud)
+✓ See initialization messages
+✓ Observe audio statistics update every 500 ms
+✓ When you speak near microphone: RMS and peak values jump up
+✓ When quiet: values drop back near zero
+
+TROUBLESHOOTING QUICK CHECKS:
+1. No output at all?
+   → Check USB cable, verify COM port, check UART driver
+   
+2. Only zeros printed?
+   → Verify GPIO 4, 5, 6 connections are solid
+   → Check 3.3V and GND connections
+   → Verify INMP441 is powered (LED may light)
+   
+3. Very high noise (peak > 500 always)?
+   → Check for loose connections
+   → Verify L/R pin is grounded (not floating)
+   → Add 0.1 µF capacitor near power
+   
+4. Inconsistent readings?
+   → Check cable connections are not moving
+   → Reduce cable length if possible
+   → Use shorter, direct jumper wires
+
+NEXT STEP AFTER MIC PASS:
+→ Proceed to NEXT_STEPS_AFTER_MIC_PASS.md
+→ Integrate micro_speech frontend
+→ Load trained DORA model
+→ Test real-time KWS on device
+
+================================================================================
+Quick Reference Complete. Ready to test microphone capture!
+================================================================================

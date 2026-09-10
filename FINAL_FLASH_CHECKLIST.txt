@@ -1,0 +1,94 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    FINAL CHECKLIST - EXPORT & FLASH                          ║
+║                         (5 minutes to microphone test)                        ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+📋 ARDUINO IDE - EXPORT BINARY (2 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+☐ Arduino IDE is open
+☐ mic_test.ino sketch is loaded
+☐ Click: Sketch → Export Compiled Binary
+☐ Wait 15-20 seconds for "Export Succeeded" message
+☐ Click: Sketch → Show Sketch Folder
+
+
+📂 FILE EXPLORER - LOCATE & COPY (2 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+☐ File Explorer is open (from "Show Sketch Folder")
+☐ I can see: mic_test.ino.esp32s3.bin file
+☐ Right-click → Copy
+☐ Navigate to: c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+☐ Right-click empty space → Paste
+☐ File is now copied to ESP32_MIC_TEST folder
+
+
+⚡ POWERSHELL - FLASH (1 minute)
+════════════════════════════════════════════════════════════════════════════════
+
+☐ Open PowerShell in ESP32_MIC_TEST folder
+☐ Run: .\FLASH_SIMPLE.ps1
+☐ Script finds .bin file
+☐ Script flashes to COM3
+☐ See "SUCCESS! Firmware flashed to ESP32-S3" message
+
+
+🔍 SERIAL MONITOR - VERIFY (1 minute)
+════════════════════════════════════════════════════════════════════════════════
+
+☐ Arduino IDE: Tools → Serial Monitor
+☐ Set baud rate: 9600 (bottom-right)
+☐ Within 2 seconds, should see:
+   =====================================================
+   DORA MICROPHONE TEST - ESP32-S3 + INMP441
+   =====================================================
+   ✓ I2S initialized successfully!
+   Listening for audio...
+
+
+🎤 MICROPHONE TEST (2 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+IN SERIAL MONITOR:
+
+☐ Observe output for 5 seconds (silent)
+   Values should be small: rms ~30-50, peak ~50-100
+
+☐ Speak "DORA" clearly for 5 seconds
+   
+☐ OBSERVE VALUES:
+   ✅ If RMS/peak JUMP UP (rms 250+, peak 800+):
+      → Report: "MIC PASS"
+      
+   ❌ If values STAY SAME (still rms ~40, peak ~100):
+      → Report: "MIC FAIL"
+
+
+TOTAL TIME: 5-6 MINUTES
+════════════════════════════════════════════════════════════════════════════════
+
+Export:     2 min
+Copy:       2 min
+Flash:      1 min
+Test:       2 min
+─────────
+TOTAL:      ~7 min
+
+
+🚀 START NOW!
+════════════════════════════════════════════════════════════════════════════════
+
+1. Go to Arduino IDE
+2. Sketch → Export Compiled Binary
+3. Wait for success
+4. Sketch → Show Sketch Folder
+5. Copy file to ESP32_MIC_TEST
+6. Run flash script
+7. Test microphone
+8. Report result
+
+GO! ✓
+
+═══════════════════════════════════════════════════════════════════════════════

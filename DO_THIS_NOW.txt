@@ -1,0 +1,110 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        DO THIS NOW - TASK #2                                 ║
+║                  Wire your INMP441 microphone to ESP32-S3                     ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+
+🟢 TRAINING STATUS
+═════════════════════════════════════════════════════════════════════════════════
+
+Terminal: term_1788972143880_61o58k5b35d
+Status: RUNNING ✓
+Last Metrics: Accuracy 82.8%, Recall 29.7%, Precision 64.2%
+Estimated Completion: ~80-90 minutes from now
+
+✓ Training is proceeding in BACKGROUND - DO NOT INTERRUPT
+
+
+🎯 YOUR NEXT TASK: WIRE THE MICROPHONE
+═════════════════════════════════════════════════════════════════════════════════
+
+📁 Read this guide:
+   → ESP32_MIC_TEST/WIRING_STEPS_SIMPLE.txt
+
+This guide shows EXACTLY how to connect 6 wires:
+   1. RED wire (3.3V)
+   2. BLACK wire #1 (GND to pin 1)
+   3. BLACK wire #2 (GND to pin 2 - L/R)
+   4. YELLOW wire (GPIO 4)
+   5. GREEN wire (GPIO 5)
+   6. BLUE wire (GPIO 6)
+
+
+📋 WIRING CHECKLIST
+═════════════════════════════════════════════════════════════════════════════════
+
+Before you start:
+☐ Unplug ESP32 from USB (NO POWER while wiring)
+☐ Gather 6 jumper wires
+☐ Have INMP441 microphone ready
+☐ Have breadboard ready
+
+Wiring:
+☐ RED wire: ESP32 3.3V → INMP441 VCC (pin 6)
+☐ BLACK wire #1: ESP32 GND → INMP441 GND (pin 1)
+☐ BLACK wire #2: ESP32 GND → INMP441 L/R (pin 2)
+☐ YELLOW wire: ESP32 GPIO 4 → INMP441 SCK (pin 3)
+☐ GREEN wire: ESP32 GPIO 5 → INMP441 WS (pin 5)
+☐ BLUE wire: ESP32 GPIO 6 → INMP441 SD (pin 4)
+
+Verification:
+☐ No loose connections
+☐ RED and BLACK don't touch
+☐ All wires firmly seated
+☐ No bent pins on INMP441
+
+Power:
+☐ Plug USB into ESP32
+☐ Plug USB into computer
+☐ No smoke or burning smell
+☐ No hot components
+
+
+⏱️ ESTIMATED TIME: 20 minutes
+
+
+🎯 AFTER WIRING IS DONE
+═════════════════════════════════════════════════════════════════════════════════
+
+Once wiring complete:
+
+TASK #3: Flash firmware
+   → Read: ARDUINO_SETUP_QUICK.txt
+   → Flash: mic_test.ino
+   → Time: ~10 minutes
+
+TASK #4: Test microphone
+   → Speak "DORA" into microphone
+   → Watch values jump in Serial Monitor
+   → Time: ~10 minutes
+
+TASK #5: Report result
+   → If values changed: "MIC PASS"
+   → If values same: "MIC FAIL"
+   → Time: 1 minute
+
+
+📍 FILE LOCATIONS
+═════════════════════════════════════════════════════════════════════════════════
+
+All guides are in this folder:
+   c:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\
+
+Start with:
+   1. WIRING_STEPS_SIMPLE.txt        ← Wiring guide (READ FIRST)
+   2. ARDUINO_SETUP_QUICK.txt        ← Flash guide (READ NEXT)
+   3. mic_test.ino                   ← Firmware file (COPY TO ARDUINO)
+
+
+🚀 START NOW!
+═════════════════════════════════════════════════════════════════════════════════
+
+1. Read WIRING_STEPS_SIMPLE.txt
+2. Follow the 5 steps exactly
+3. Report "WIRING COMPLETE" when done
+
+Then proceed to Task #3 (Flash firmware)
+
+Training continues running in background! ✓
+
+═════════════════════════════════════════════════════════════════════════════════
