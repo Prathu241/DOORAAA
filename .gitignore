@@ -1,0 +1,38 @@
+# Node modules
+dashboard/node_modules/
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.Python
+env/
+venv/
+
+# Large binary files and datasets
+*.h5
+*.onnx
+*.tflite
+*.pb
+*.zip
+negative_datasets/
+piper_voices/
+trained_models/
+dataset/
+
+# Dashboard build
+dashboard/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.temp/
+temp/
+push_output.txt
