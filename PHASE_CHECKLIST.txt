@@ -1,0 +1,524 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║              DORA ESP32 DEPLOYMENT - PHASE-BY-PHASE CHECKLIST                  ║
+║                  Use This to Track Your Progress to Completion                 ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+                          ✅ = COMPLETE    ⏳ = IN PROGRESS    ❌ = BLOCKED
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 1: HARDWARE SETUP (Duration: 10 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Wire the microphone and verify hardware connections
+
+Sub-tasks:
+
+  ☐ 1.1 - Gather all materials
+        Items needed: ESP32-S3, INMP441 microphone, 6 jumper wires
+        Reference: None
+        Time: 2 min
+        Status: ___________
+
+  ☐ 1.2 - Unplug ESP32 from USB (NO POWER while wiring)
+        Action: Disconnect USB cable
+        Reference: WIRING_STEPS_SIMPLE.txt (Step 1)
+        Time: 1 min
+        Status: ___________
+
+  ☐ 1.3 - Wire INMP441 power pins (RED & BLACK wires)
+        Wire: RED (3.3V) and BLACK (GND)
+        Reference: WIRING_STEPS_SIMPLE.txt (Step 2)
+        Time: 3 min
+        Status: ___________
+
+  ☐ 1.4 - Wire INMP441 signal pins (YELLOW, GREEN, BLUE)
+        Wire: YELLOW (GPIO4→SCK), GREEN (GPIO5→WS), BLUE (GPIO6→SD)
+        Reference: WIRING_STEPS_SIMPLE.txt (Step 3)
+        Time: 3 min
+        Status: ___________
+
+  ☐ 1.5 - Verify all 6 wires and connections
+        Check: All wires firmly seated, no loose connections
+        Reference: WIRING_STEPS_SIMPLE.txt (Step 4)
+        Time: 1 min
+        Status: ___________
+
+  ☐ 1.6 - Plug ESP32 USB
+        Action: Connect USB-C cable to ESP32 and computer
+        Reference: WIRING_STEPS_SIMPLE.txt (Step 5)
+        Time: 1 min
+        Status: ___________
+
+  ☐ 1.7 - Get your computer's IP address
+        Run: ipconfig (PowerShell)
+        Record: IPv4 Address: ___________________
+        Time: 1 min
+        Status: ___________
+
+✅ PHASE 1 COMPLETE when:
+   - All 6 wires visually correct
+   - No smoke or strange smells
+   - Computer shows new COM port in Device Manager
+   - Your IP address recorded
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 2: MICROPHONE TEST (Duration: 15 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Verify microphone is capturing audio correctly
+
+Sub-tasks:
+
+  ☐ 2.1 - Open Arduino IDE
+        Action: Launch Arduino IDE 2.0+
+        Reference: None
+        Time: 1 min
+        Status: ___________
+
+  ☐ 2.2 - Install/verify ESP32 board support
+        Go to: Tools → Board Manager → Search "ESP32"
+        Install: ESP32 by Espressif Systems (if needed)
+        Time: 5 min (or instant if already installed)
+        Status: ___________
+
+  ☐ 2.3 - Load microphone test sketch
+        File → Open → ESP32_MIC_TEST/mic_test.ino
+        Reference: ARDUINO_SETUP_QUICK.txt
+        Time: 1 min
+        Status: ___________
+
+  ☐ 2.4 - Configure Arduino IDE
+        Select Board: Tools → Board → ESP32-S3 Dev Module
+        Select Port: Tools → Port → COMx (your port)
+        Select Speed: Tools → Upload Speed → 921600
+        Time: 2 min
+        Status: ___________
+
+  ☐ 2.5 - Upload firmware
+        Button: Click Upload (Ctrl+U)
+        Wait for: "Leaving... Hard resetting via RTS pin"
+        Expected: "Upload successful" message
+        Time: 2 min
+        Reference: ARDUINO_SETUP_QUICK.txt (Part 7)
+        Status: ___________
+
+  ☐ 2.6 - Open Serial Monitor
+        Tools → Serial Monitor (Ctrl+Shift+M)
+        Verify: Baud rate is 9600 (bottom-right)
+        Should see: Startup messages from microphone test
+        Time: 1 min
+        Status: ___________
+
+  ☐ 2.7 - Silence test (10 seconds)
+        Action: Sit quiet and observe Serial Monitor
+        Record: RMS value: ___________  Peak: ___________
+        Expected: RMS 30-60, Peak 50-100
+        Status: ___________
+
+  ☐ 2.8 - Speech test (5 seconds)
+        Action: Speak "DORA" clearly into microphone
+        Record: RMS value: ___________  Peak: ___________
+        Expected: RMS 150-400, Peak 300-800 (should be much higher!)
+        Status: ___________
+
+  ☐ 2.9 - Clap test (3 seconds)
+        Action: Clap loudly near microphone
+        Record: Peak value: ___________
+        Expected: Peak > 800-1000 (sharp spike)
+        Status: ___________
+
+✅ PHASE 2 COMPLETE when:
+   - Firmware uploaded successfully
+   - Serial Monitor shows stable output
+   - Silence test: low values
+   - Speech test: values jump 3-5x higher than silence
+   - Clap test: peak spikes to 1000+
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 3: MODEL VALIDATION (Duration: 5 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Verify trained model file exists and is valid
+
+Sub-tasks:
+
+  ☐ 3.1 - Check model file exists
+        Path: trained_models/DORA/tflite_stream_state_internal_quant/stream_state_internal_quant.tflite
+        Run: Get-Item [path]
+        Expected: File found, not "File not found" error
+        Time: 1 min
+        Status: ___________
+
+  ☐ 3.2 - Check model file size
+        File size should be: 200-500 KB
+        Record: Actual size: ___________
+        If wrong, file may be corrupted or unquantized
+        Time: 1 min
+        Status: ___________
+
+  ☐ 3.3 - Test model loads in Python
+        Command: 
+          python
+          >>> import tensorflow as tf
+          >>> interpreter = tf.lite.Interpreter("[model path]")
+          >>> interpreter.allocate_tensors()
+          >>> print("SUCCESS")
+        Expected: "SUCCESS" message, no errors
+        Time: 2 min
+        Status: ___________
+
+  ☐ 3.4 - Check input/output tensors
+        Commands:
+          >>> details_in = interpreter.get_input_details()
+          >>> details_out = interpreter.get_output_details()
+          >>> print(details_in)
+        Verify: Input tensor exists, output tensor exists
+        Time: 1 min
+        Status: ___________
+
+✅ PHASE 3 COMPLETE when:
+   - Model file found at correct path
+   - File size is 200-500 KB
+   - Loads in Python without errors
+   - Input/output tensors visible
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 4: DASHBOARD SERVER STARTUP (Duration: 5 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Start the dashboard server
+
+Sub-tasks:
+
+  ☐ 4.1 - Open new PowerShell window
+        Action: Win+R → powershell
+        Navigate to: cd dashboard
+        Time: 1 min
+        Status: ___________
+
+  ☐ 4.2 - Start server
+        Command: python server.js
+        Wait for: "Server running on http://localhost:8765"
+        Time: 2 min
+        Status: ___________
+
+  ☐ 4.3 - Verify server is listening
+        Open browser: http://localhost:8765
+        Expected: Dashboard loads (or "OK" message)
+        Record: Server is responding: YES / NO
+        Time: 1 min
+        Status: ___________
+
+  ☐ 4.4 - Keep server running
+        Action: Leave PowerShell window open
+        Don't close until Phase 6 complete
+        Time: Ongoing
+        Status: ___________
+
+✅ PHASE 4 COMPLETE when:
+   - Server starts with no errors
+   - Browser can access http://localhost:8765
+   - Server terminal shows "listening" or "ready"
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 5: ESP32 FIRMWARE CONFIGURATION & DEPLOYMENT (Duration: 30 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Deploy full firmware with networking and inference
+
+Sub-tasks (Choose ONE option):
+
+OPTION A - Simple Approach (Recommended for first-time):
+───────────────────────────────────────────────────────
+
+  ☐ 5A.1 - Extend microphone test firmware
+        Action: Copy mic_test.ino to new file
+        Reference: None yet (you would create this)
+        Time: 5 min
+        Status: ___________
+
+  ☐ 5A.2 - Add WiFi code
+        Add: #define WIFI_SSID "YOUR_NETWORK"
+             #define WIFI_PASS "YOUR_PASSWORD"
+             #include <WiFi.h>
+             // WiFi connection code
+        Time: 10 min
+        Status: ___________
+
+  ☐ 5A.3 - Add server configuration
+        Add: #define SERVER_IP "192.168.1.100"  (from Phase 1.7)
+             #define SERVER_PORT 8765
+        Time: 2 min
+        Status: ___________
+
+  ☐ 5A.4 - Upload to ESP32
+        Same as Phase 2.5: Click Upload (Ctrl+U)
+        Wait for: "Upload successful"
+        Time: 3 min
+        Status: ___________
+
+  ☐ 5A.5 - Monitor Serial for connection
+        Serial Monitor should show:
+        "[WiFi] Connecting to YOUR_NETWORK..."
+        "[WiFi] Connected! IP: 192.168.1.50"
+        Time: 2 min
+        Status: ___________
+
+OPTION B - Advanced (If full firmware available):
+──────────────────────────────────────────────
+
+  ☐ 5B.1 - Navigate to firmware directory
+        cd dora_firmware
+        Time: 1 min
+        Status: ___________
+
+  ☐ 5B.2 - Install dependencies
+        idf.py add-dependency "espressif/esp-tflite-micro"
+        idf.py add-dependency "espressif/esp-opus"
+        Time: 5 min
+        Status: ___________
+
+  ☐ 5B.3 - Update WiFi credentials in main.c
+        Edit: dora_firmware/main/main.c
+        Update: WIFI_SSID, WIFI_PASS, SERVER_URI
+        Time: 5 min
+        Status: ___________
+
+  ☐ 5B.4 - Build firmware
+        idf.py build
+        Wait for: "Building complete"
+        Time: 10 min
+        Status: ___________
+
+  ☐ 5B.5 - Flash to ESP32
+        idf.py flash monitor
+        Wait for: "DORA Inference Engine Starting"
+        Time: 5 min
+        Status: ___________
+
+✅ PHASE 5 COMPLETE when:
+   (Option A OR B - choose one)
+   - Firmware uploads without errors
+   - Serial Monitor shows connection messages
+   - ESP32 gets a valid IP address
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 6: CONNECTIVITY VERIFICATION (Duration: 5 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Verify ESP32 connected to server
+
+Sub-tasks:
+
+  ☐ 6.1 - Monitor Serial output
+        Serial Monitor should show:
+        ✓ [WiFi] Connected! IP: 192.168.x.x
+        ✓ [WS] Connecting to ws://192.168.1.100:8765/stream
+        ✓ [WS] Connected!
+        Time: 2 min
+        Status: ___________
+
+  ☐ 6.2 - Check server logs
+        In dashboard PowerShell terminal, should see:
+        "[stream] Client connected from 192.168.x.x"
+        Record: ESP32 IP that connected: ___________
+        Time: 1 min
+        Status: ___________
+
+  ☐ 6.3 - Verify data flow
+        Server terminal might show:
+        "[stream] Receiving audio frame: 320 samples"
+        or "[kws] Model output: prob=0.85"
+        Time: 1 min
+        Status: ___________
+
+  ☐ 6.4 - Check dashboard display
+        Browser at http://localhost:8765 might show:
+        - Real-time audio waveform
+        - Detection status
+        - System metrics
+        Time: 1 min
+        Status: ___________
+
+✅ PHASE 6 COMPLETE when:
+   - Serial shows both WiFi AND WebSocket "Connected"
+   - Server shows client connection
+   - No "Connection refused" or "Timeout" errors
+
+
+════════════════════════════════════════════════════════════════════════════════
+PHASE 7: END-TO-END TESTING (Duration: 10 minutes)
+════════════════════════════════════════════════════════════════════════════════
+
+Objective: Test keyword detection end-to-end
+
+Sub-tasks:
+
+  ☐ 7.1 - Positive detection test #1
+        Action: Speak "DORA" clearly
+        Expected: Dashboard shows detection or server logs show result
+        Result: PASS / FAIL
+        Time: 1 min
+        Status: ___________
+
+  ☐ 7.2 - Positive detection test #2
+        Action: Speak "DORA" again (repeat 10 times total)
+        Record: Successes: _____ / 10
+        Expected: ≥ 8 successful (80%+)
+        Time: 2 min
+        Status: ___________
+
+  ☐ 7.3 - False positive test
+        Action: Speak other words: "Hello", "Hi", "Help", "Data"
+        Expected: NO detection (these are not "DORA")
+        Result: PASS (no false positives) / FAIL (false positives)
+        Time: 2 min
+        Status: ___________
+
+  ☐ 7.4 - Continuous operation test
+        Action: Keep system running for 5 minutes
+        Keep speaking "DORA" randomly
+        Monitor: Any crashes? Disconnections? Hangs?
+        Result: PASS (stable) / FAIL (unstable)
+        Time: 5 min
+        Status: ___________
+
+  ☐ 7.5 - Measure latency
+        Action: Speak "DORA" and note time
+        Observe: When detection appears on dashboard
+        Calculate: Latency = detection_time - speak_time
+        Record: Average latency: ___________
+        Expected: 100-500ms
+        Time: 1 min
+        Status: ___________
+
+✅ PHASE 7 COMPLETE when:
+   - Keyword detected 80%+ of the time
+   - False positives minimal (< 1 per minute)
+   - System runs 5+ minutes without crashing
+   - Latency < 600ms average
+
+
+════════════════════════════════════════════════════════════════════════════════
+FINAL VALIDATION CHECKLIST
+════════════════════════════════════════════════════════════════════════════════
+
+Requirements to PASS DEPLOYMENT:
+
+HARDWARE:
+  ☐ Microphone responds to sound (Phase 2)
+  ☐ Power supply: 3.3V ± 0.1V measured
+  ☐ No loose wires or connections
+  ☐ No smoke, burned smell, or hot components
+
+SOFTWARE:
+  ☐ Firmware uploads successfully (Phase 5)
+  ☐ Model file valid (Phase 3)
+  ☐ Server runs without errors (Phase 4)
+
+CONNECTIVITY:
+  ☐ ESP32 connects to WiFi (Phase 6)
+  ☐ ESP32 connects to WebSocket (Phase 6)
+  ☐ Server receives data from ESP32 (Phase 6)
+
+FUNCTIONALITY:
+  ☐ Keyword "DORA" detected consistently (Phase 7)
+  ☐ False positives rare (Phase 7)
+  ☐ Latency acceptable (Phase 7)
+  ☐ System stable 5+ minutes (Phase 7)
+
+
+════════════════════════════════════════════════════════════════════════════════
+DEPLOYMENT STATUS
+════════════════════════════════════════════════════════════════════════════════
+
+    PHASE 1 - Hardware Setup              ☐ ☐ ☐ ☐ ☐ ☐ ☐
+    PHASE 2 - Microphone Test             ☐ ☐ ☐ ☐ ☐ ☐ ☐ ☐ ☐
+    PHASE 3 - Model Validation            ☐ ☐ ☐ ☐
+    PHASE 4 - Dashboard Server            ☐ ☐ ☐ ☐
+    PHASE 5 - Firmware Deployment         ☐ ☐ ☐ ☐ ☐
+    PHASE 6 - Connectivity Verification   ☐ ☐ ☐ ☐
+    PHASE 7 - End-to-End Testing          ☐ ☐ ☐ ☐ ☐
+
+                        ═════════════════════════════════════
+
+    ✅ ALL PHASES COMPLETE - DEPLOYMENT SUCCESSFUL!
+
+                        Or...
+
+    ❌ PHASE _____ NOT COMPLETE - Debug and retry
+       Blocking issue: _________________________________
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+📝 NOTES & OBSERVATIONS
+
+Phase 1 Notes:
+_____________________________________________________________________________
+
+Phase 2 Notes:
+_____________________________________________________________________________
+
+Phase 3 Notes:
+_____________________________________________________________________________
+
+Phase 4 Notes:
+_____________________________________________________________________________
+
+Phase 5 Notes:
+_____________________________________________________________________________
+
+Phase 6 Notes:
+_____________________________________________________________________________
+
+Phase 7 Notes:
+_____________________________________________________________________________
+
+Issues Encountered:
+_____________________________________________________________________________
+
+Solutions Applied:
+_____________________________________________________________________________
+
+Overall Status:
+_____________________________________________________________________________
+
+
+════════════════════════════════════════════════════════════════════════════════
+DEPLOYMENT COMPLETION SIGN-OFF
+════════════════════════════════════════════════════════════════════════════════
+
+System Ready for Testing:        YES / NO
+Date Completed:                  _______________
+Time Taken:                      _______________
+Total Attempts:                  _______________
+
+Deployment Verified By:          _______________
+
+Next Action:
+  ☐ Use system for inference testing
+  ☐ Collect more training data
+  ☐ Improve model accuracy
+  ☐ Deploy to production
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+✨ CONGRATULATIONS - YOU'RE READY! ✨
+
+Your DORA system is deployed and tested. You can now:
+- Use it for real-time keyword detection
+- Integrate with other applications
+- Expand to multiple keywords
+- Deploy to production
+
+Next steps: Review NEXT_STEPS_AFTER_MIC_PASS.md for advanced features.
+
+════════════════════════════════════════════════════════════════════════════════

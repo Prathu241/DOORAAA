@@ -1,0 +1,418 @@
+================================================================================
+DORA ESP32 DEPLOYMENT - QUICK COMMAND REFERENCE
+================================================================================
+
+All commands assume you're in: C:\Users\PRATHAM\DORA_MIXED-net
+
+================================================================================
+PHASE 1: HARDWARE SETUP
+================================================================================
+
+Find your computer's IP address (for server connection):
+    ipconfig
+    # Look for "IPv4 Address" in your active connection, e.g., 192.168.1.100
+
+Check Device Manager for ESP32 COM port (Windows):
+    # Open: Start → Device Manager → Ports (COM & LPT)
+    # Should show: "USB-SERIAL CH340 (COMx)"
+
+Measure power supply (using multimeter):
+    # VDD to GND on INMP441 should read: 3.3V ± 0.1V
+
+================================================================================
+PHASE 2: MICROPHONE TEST
+================================================================================
+
+Quick Test - Upload & Monitor:
+    1. Open Arduino IDE
+    2. File → Open → ESP32_MIC_TEST\mic_test.ino
+    3. Tools → Board → ESP32-S3 Dev Module
+    4. Tools → Port → Select your COM port
+    5. Tools → Upload Speed → 921600
+    6. Click Upload (Ctrl+U)
+    7. Tools → Serial Monitor (Ctrl+Shift+M)
+    8. Ensure baud rate is 9600
+
+Expected Serial Output:
+    =====================================================
+    DORA MICROPHONE TEST - ESP32-S3 + INMP441
+    =====================================================
+    ✓ I2S initialized successfully!
+    ✓ Listening for audio...
+    
+    MIC TEST
+    samples=8000
+    rms=45.2
+    peak=105
+    ---
+
+Test Microphone:
+    1. Silence test (10 sec):  values ~30-60 rms, ~50-100 peak
+    2. Speech test (5 sec):    speak "DORA" → rms jumps to 150-400
+    3. Clap test (3 sec):      clap loud → peak spikes to 1000+
+
+================================================================================
+PHASE 3: MODEL VALIDATION
+================================================================================
+
+Check trained model exists and has correct size:
+    Get-Item trained_models/DORA/tflite_stream_state_internal_quant/stream_state_internal_quant.tflite | Select-Object Length
+    # Should show: ~200-500 KB
+
+Validate model in Python:
+    python
+    >>> import tensorflow as tf
+    >>> interpreter = tf.lite.Interpreter("trained_models/DORA/tflite_stream_state_internal_quant/stream_state_internal_quant.tflite")
+    >>> interpreter.allocate_tensors()
+    >>> print("Model loaded successfully!")
+    >>> exit()
+
+================================================================================
+PHASE 4: START DASHBOARD SERVER
+================================================================================
+
+Start Python Server (New PowerShell window):
+    cd dashboard
+    python server.js
+    # Should show: "Server running on http://localhost:8765"
+
+OR if using Flask:
+    cd dashboard
+    python app.py
+    # Should show: "Running on http://localhost:5000"
+
+Start React Frontend (Optional, New PowerShell window):
+    cd dashboard
+    npm run dev
+    # Should show: "http://localhost:3000"
+
+Open Dashboard in Browser:
+    http://localhost:8765  (if using Node.js server)
+    http://localhost:3000  (if using React frontend)
+
+Test Server is Running:
+    curl http://localhost:8765
+    # Should return response (not "Connection refused")
+
+================================================================================
+PHASE 5: ESP32 FIRMWARE CONFIGURATION
+================================================================================
+
+Update Firmware with Your Network Details:
+
+In Arduino IDE, before uploading full firmware, add:
+    #define WIFI_SSID "YOUR_WIFI_NAME"
+    #define WIFI_PASS "YOUR_WIFI_PASSWORD"
+    #define SERVER_IP "192.168.1.100"     # Your computer IP from PHASE 1
+
+Build & Upload (if using ESP-IDF):
+    cd dora_firmware
+    idf.py build
+    idf.py flash monitor
+
+Build & Upload (if using Arduino):
+    1. Create new sketch
+    2. Copy full firmware code from dora_firmware/main/main.c
+    3. Update WiFi/Server settings (see above)
+    4. Click Upload (Ctrl+U)
+
+Monitor Output:
+    # Serial Monitor should show:
+    [BOOT] DORA Inference Engine v1.0
+    [I2S] Initializing audio capture at 16000 Hz
+    [WiFi] Connecting to "YOUR_SSID"...
+    [WiFi] Connected! IP: 192.168.1.50
+    [WS] Connecting to ws://192.168.1.100:8765/stream
+    [WS] Connected!
+    [KWS] Listening for "DORA"...
+
+================================================================================
+PHASE 6: END-TO-END TESTING
+================================================================================
+
+Test 1: Keyword Detection
+    1. Speak "DORA" clearly into microphone
+    2. Watch Serial Monitor for detection confirmation
+    3. Check Dashboard receives audio stream
+    4. Repeat 10 times, record success rate
+    # Expected: 85%+ successful detections
+
+Test 2: False Positives
+    1. Speak other words: "Hello", "Hi", "Help", "Data"
+    2. Monitor: should NOT trigger detection
+    3. Repeat for 2 minutes
+    # Expected: < 1 false positive per minute
+
+Test 3: Latency Measurement
+    1. Speak "DORA" and note time (use phone timer)
+    2. Observe when detection appears on dashboard
+    3. Calculate: latency = detection_time - speak_time
+    4. Repeat 5 times and average
+    # Expected: 100-500ms average
+
+Test 4: Continuous Operation
+    1. Keep system running for 5+ minutes
+    2. Speak keyword randomly 10-15 times
+    3. Monitor for crashes or disconnections
+    # Expected: 0 crashes, 0 disconnections
+
+================================================================================
+TROUBLESHOOTING - QUICK FIXES
+================================================================================
+
+Problem: "Port not found" in Arduino IDE
+    Fix: 
+    1. Unplug USB from ESP32
+    2. Wait 3 seconds
+    3. Plug USB back in
+    4. Tools → Port (should see new COM port)
+
+Problem: Serial Monitor shows garbage/corrupted text
+    Fix:
+    1. Bottom-right of Serial Monitor shows baud rate
+    2. Click dropdown and select 9600
+    3. Close and reopen Serial Monitor
+
+Problem: Microphone shows only zeros
+    Fix:
+    1. Check wiring: GPIO 4 (SCK), GPIO 5 (WS), GPIO 6 (SD)
+    2. Measure voltage: VDD-GND should be 3.3V ± 0.1V
+    3. Try different USB cable (more power)
+
+Problem: WiFi "Authentication Failed"
+    Fix:
+    1. Double-check WiFi SSID and password (case-sensitive)
+    2. Ensure WiFi is 2.4GHz (not 5GHz)
+    3. Restart WiFi router
+    4. Restart ESP32
+
+Problem: WebSocket "Connection refused"
+    Fix:
+    1. Verify server is running: python server.js
+    2. Find correct IP: ipconfig (IPv4 Address)
+    3. Update ESP32 firmware with correct IP
+    4. Check Windows Firewall allows port 8765
+
+Problem: Detection rate very low (< 50%)
+    Fix:
+    1. Check microphone working (PHASE 2 test)
+    2. Check model file correct size (~300 KB)
+    3. Try different keyword variations (shout vs. whisper)
+    4. Move microphone closer (8-20 cm)
+    5. Check for background noise
+
+================================================================================
+COMPLETE TESTING CHECKLIST
+================================================================================
+
+□ PHASE 1 - Hardware wired correctly
+  Evidence: All 6 wires connected, VDD reads 3.3V
+
+□ PHASE 2 - Microphone working
+  Evidence: RMS values jump 3-5x when speaking
+
+□ PHASE 3 - Model file valid
+  Evidence: File exists, size ~300 KB, loads in Python
+
+□ PHASE 4 - Server running
+  Evidence: Dashboard accessible at localhost:8765
+
+□ PHASE 5 - ESP32 connected
+  Evidence: WiFi connected (IP shown), WebSocket established
+
+□ PHASE 6 - Keyword detected
+  Evidence: "DORA" triggers 85%+ success rate
+
+□ ALL TESTS PASS - READY FOR DEPLOYMENT ✅
+
+================================================================================
+KEY FILE PATHS - Quick Reference
+================================================================================
+
+Microphone Test Firmware:
+    ESP32_MIC_TEST/mic_test.ino
+
+Full DORA Firmware (if available):
+    dora_firmware/main/main.c
+
+Trained Model:
+    trained_models/DORA/tflite_stream_state_internal_quant/stream_state_internal_quant.tflite
+
+Dashboard Server:
+    dashboard/server.js or dashboard/app.py
+
+Dashboard Frontend:
+    dashboard/src/App.jsx (React)
+
+Deployment Guides:
+    docs/08_Firmware_Guide.md
+    docs/11_Deployment_Guide.md
+
+Wiring Diagram:
+    ESP32_MIC_TEST/WIRING_STEPS_SIMPLE.txt
+
+Testing Protocol:
+    ESP32_MIC_TEST/TESTING_PROTOCOL.md
+
+Quick Start Guide:
+    DEPLOYMENT_QUICK_START.md (THIS DOCUMENT FOLDER)
+
+================================================================================
+WIFI NETWORKS - For Testing
+================================================================================
+
+Standard 2.4GHz WiFi:
+    Name: YOUR_NETWORK_NAME
+    Password: YOUR_PASSWORD
+    ESP32 will show: "Connected! IP: 192.168.1.50"
+
+Hotspot (from phone):
+    Create mobile hotspot on phone
+    Connect ESP32 to phone hotspot
+    Use phone's local IP for SERVER_IP
+
+Guest Network:
+    If available on router
+    Lower security, easier for testing
+    Same connection process
+
+================================================================================
+LATENCY MEASUREMENT - Detailed Procedure
+================================================================================
+
+Equipment Needed:
+    - Smartphone with timer app
+    - ESP32 with microphone
+    - Dashboard open in browser
+
+Procedure:
+    1. Speak "DORA" while looking at phone timer
+    2. Note exact time of utterance (start of "D" sound)
+    3. Observe dashboard for detection notification
+    4. Note exact time when detection appears
+    5. Calculate: latency = detection_time - speak_time
+    6. Repeat 5 times and calculate average
+
+Expected Results:
+    First detection: ~200-300ms
+    Average (5 trials): ~250ms
+    Range: 100-500ms acceptable
+
+If latency > 500ms:
+    - Check WiFi signal strength (RSSI)
+    - Check ESP32 CPU usage (telemetry)
+    - Check server response time
+    - Possible bottleneck: model inference time
+
+================================================================================
+PERFORMANCE MONITORING - What to Watch
+================================================================================
+
+ESP32 Resources (from telemetry):
+    RAM usage: Should stay < 200 KB (max available ~320 KB)
+    CPU usage: Should stay < 20% average
+    If > 50% CPU: Model might be too complex
+
+Network Stability:
+    WebSocket connection: Should stay connected 10+ minutes
+    Packet loss: Should be 0%
+    Ping time: Should be < 50ms
+
+Detection Quality:
+    True positive rate: > 80%
+    False positive rate: < 1 per 2 minutes
+    Latency: Consistent (not spiking randomly)
+
+Audio Stream:
+    Sample rate: 16000 Hz (16 kHz) ✓
+    Bit depth: 16-bit PCM ✓
+    Channels: Mono (1 channel) ✓
+    Frame size: 320 samples = 20ms frames ✓
+
+================================================================================
+NEXT STEPS AFTER SUCCESSFUL DEPLOYMENT
+================================================================================
+
+1. Collect More Keyword Samples:
+   - Record "DORA" utterances from 10+ people
+   - Include different accents, ages, genders
+   - Record in different noise environments
+
+2. Tune Detection Threshold:
+   - Adjust KWS_THRESHOLD in firmware
+   - Trade-off: higher threshold = fewer false positives
+   - Lower threshold = better detection rate
+
+3. Measure Accuracy:
+   - Test on 100+ keyword samples
+   - Measure precision, recall, F1-score
+   - Compare to baseline
+
+4. Optimize Model:
+   - Reduce model size further (pruning)
+   - Quantize to int8 if not already
+   - Target: < 250 KB model size
+
+5. Test in Real Environments:
+   - Noisy coffee shop
+   - Outdoor environment
+   - Car/vehicle
+   - Different distances from microphone
+
+6. Add Advanced Features:
+   - Multiple keywords beyond "DORA"
+   - Voice activity detection (VAD)
+   - Speaker identification
+   - Emotion detection
+
+================================================================================
+SUPPORT RESOURCES
+================================================================================
+
+Documentation:
+    docs/01_Project_Overview.md        - High-level project overview
+    docs/04_Hardware_Documentation.md  - Detailed hardware specs
+    docs/06_Model_Pipeline.md          - Model training and conversion
+    docs/08_Firmware_Guide.md          - Firmware architecture
+    docs/11_Deployment_Guide.md        - Deployment procedures
+    docs/10_Evaluation_and_Testing.md  - Evaluation metrics
+
+Arduino Documentation:
+    https://www.arduino.cc/en/software
+    https://docs.espressif.com/projects/arduino-esp32/
+
+ESP32 Documentation:
+    https://docs.espressif.com/projects/esp-idf/
+    https://github.com/espressif/esp32-s3-devkitc-1
+
+TensorFlow Lite:
+    https://www.tensorflow.org/lite/microcontrollers
+    https://github.com/tensorflow/tflite-micro
+
+microWakeWord:
+    https://github.com/kahrendt/microWakeWord
+
+================================================================================
+FINAL CHECKLIST - Ready to Deploy?
+================================================================================
+
+Before considering deployment complete:
+
+☐ Microphone test passes (RMS values respond to sound)
+☐ Model file exists and loads correctly
+☐ Dashboard server runs without errors
+☐ ESP32 connects to WiFi successfully
+☐ ESP32 connects to WebSocket server
+☐ Keyword "DORA" detected 85%+ of the time
+☐ False positive rate < 1 per 2 minutes
+☐ System runs 5+ minutes without crashing
+☐ Latency is < 600ms average
+☐ All wiring verified and stable
+
+If ALL boxes checked: ✅ YOU'RE READY FOR PRODUCTION DEPLOYMENT
+
+================================================================================
+Questions? Contact the development team or review docs/ folder.
+
+Good luck! 🚀
+================================================================================
