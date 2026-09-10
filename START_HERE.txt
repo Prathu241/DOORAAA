@@ -1,0 +1,363 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                ║
+║                       🚀 DORA ESP32 DEPLOYMENT GUIDE 🚀                       ║
+║                                                                                ║
+║              Welcome! You have everything you need to deploy DORA              ║
+║                  from code to working keyword detection on ESP32               ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+
+👋 WELCOME!
+════════════════════════════════════════════════════════════════════════════════
+
+You're looking at the complete DORA (Detect on Resource-limited Audio) system.
+This is a keyword detection system that runs on ESP32-S3 microcontrollers with
+I2S digital microphones.
+
+Today, you'll deploy the code and get it working end-to-end.
+Expected time: 45-60 minutes
+
+
+📚 WHICH DOCUMENT SHOULD I READ FIRST?
+════════════════════════════════════════════════════════════════════════════════
+
+👉 If you want the QUICK VERSION:
+   1. DEPLOYMENT_SUMMARY.txt  ← Read this first! (5 min overview)
+   2. PHASE_CHECKLIST.txt     ← Use this to track your progress
+   3. QUICK_COMMANDS.txt      ← Copy-paste commands as needed
+
+👉 If you want the DETAILED VERSION:
+   1. DEPLOYMENT_QUICK_START.md  ← Full step-by-step guide (30 pages)
+   2. TESTING_PROTOCOL.md        ← Detailed test procedures
+   3. ESP32_MIC_TEST/WIRING_STEPS_SIMPLE.txt ← Wiring diagram
+
+👉 If you need REFERENCE:
+   1. QUICK_COMMANDS.txt      ← All commands in one place
+   2. docs/                   ← Architecture & design docs
+   3. ESP32_MIC_TEST/         ← Firmware & test files
+
+
+🎯 QUICK OVERVIEW - What You'll Do
+════════════════════════════════════════════════════════════════════════════════
+
+TODAY'S MISSION IN 7 PHASES:
+
+Phase 1 (10 min):  Wire the microphone to ESP32
+Phase 2 (15 min):  Test microphone works
+Phase 3 (5 min):   Verify trained model is valid
+Phase 4 (5 min):   Start dashboard server
+Phase 5 (30 min):  Deploy full firmware
+Phase 6 (5 min):   Verify connectivity
+Phase 7 (10 min):  Test keyword detection
+
+Total: 45-60 minutes if all goes smoothly
+Breakfix time may add to this
+
+
+⚡ PREREQUISITE CHECKLIST
+════════════════════════════════════════════════════════════════════════════════
+
+Before starting, verify you have:
+
+HARDWARE:
+  ☐ ESP32-S3 DevKit board
+  ☐ INMP441 I2S microphone
+  ☐ 6 jumper wires (male-female)
+  ☐ USB-C cable (for ESP32)
+  ☐ USB cable with power (more important than data speed)
+
+SOFTWARE:
+  ☐ Arduino IDE 2.0+ installed
+  ☐ Python 3.10+ installed
+  ☐ git installed
+  ☐ ESP32 board support in Arduino IDE
+  ☐ Internet connection (for initial setup)
+
+KNOWLEDGE:
+  ☐ Basic command line (PowerShell)
+  ☐ How to open Arduino IDE
+  ☐ Can find your computer's IP address (ipconfig)
+
+
+🎓 IMPORTANT CONCEPTS
+════════════════════════════════════════════════════════════════════════════════
+
+DORA System Architecture:
+
+    ┌─ ESP32-S3 Microcontroller
+    │  ├─ Audio Capture (I2S driver)
+    │  ├─ TensorFlow Lite Model (keyword detection)
+    │  └─ WiFi & WebSocket (communication)
+    │
+    ├─ INMP441 Digital Microphone
+    │  └─ 16 kHz stereo audio input (using left channel only)
+    │
+    ├─ Dashboard Server (Python/Node.js)
+    │  ├─ WebSocket endpoint for audio streams
+    │  ├─ HTTP API for telemetry
+    │  └─ Web UI for visualization
+    │
+    └─ Trained TensorFlow Lite Model
+       └─ Quantized int8 (~300 KB)
+
+
+KEY TERMS:
+
+- I2S: Audio interface protocol (3 wires: clock, select, data)
+- TFLite: TensorFlow Lite (optimized ML for microcontrollers)
+- Quantization: Reducing model size (float32 → int8)
+- GPIO: General Purpose I/O pins on microcontroller
+- WebSocket: Persistent connection for real-time data
+- Latency: Delay from audio to detection result
+
+
+📁 KEY FILES & WHAT THEY DO
+════════════════════════════════════════════════════════════════════════════════
+
+DOCUMENTATION (Start here):
+  START_HERE.txt                ← You're reading this!
+  DEPLOYMENT_SUMMARY.txt        ← Quick overview (5 min read)
+  PHASE_CHECKLIST.txt           ← Track your progress ✓
+  QUICK_COMMANDS.txt            ← All commands you'll need
+
+DETAILED GUIDES:
+  DEPLOYMENT_QUICK_START.md     ← Full step-by-step (THE MAIN GUIDE)
+  ESP32_MIC_TEST/TESTING_PROTOCOL.md ← Detailed test procedures
+  ESP32_MIC_TEST/WIRING_STEPS_SIMPLE.txt ← Wiring diagram
+
+FIRMWARE & CODE:
+  ESP32_MIC_TEST/mic_test.ino   ← Test microphone code
+  dora_firmware/main/main.c     ← Full inference firmware
+  dashboard/server.js           ← Backend server
+  dashboard/src/App.jsx         ← Frontend UI
+
+MODEL:
+  trained_models/DORA/tflite_stream_state_internal_quant/stream_state_internal_quant.tflite
+  └─ Your trained keyword detection model (~300 KB)
+
+DOCUMENTATION:
+  docs/08_Firmware_Guide.md     ← How firmware works
+  docs/11_Deployment_Guide.md   ← Detailed deployment
+  docs/06_Model_Pipeline.md     ← Model training process
+
+
+🚀 GET STARTED RIGHT NOW
+════════════════════════════════════════════════════════════════════════════════
+
+1️⃣  READ (5 minutes):
+    → Open DEPLOYMENT_SUMMARY.txt
+    → Understand the 7 phases
+    → Check you have all prerequisites
+
+2️⃣  REFERENCE (keep open):
+    → Open PHASE_CHECKLIST.txt
+    → Use to track your progress
+    → Check off each step as you complete it
+
+3️⃣  FOLLOW (45-60 minutes):
+    → Open DEPLOYMENT_QUICK_START.md
+    → Follow Phase 1 through Phase 7
+    → Keep QUICK_COMMANDS.txt handy for commands
+
+4️⃣  TROUBLESHOOT (if needed):
+    → Check QUICK_COMMANDS.txt troubleshooting section
+    → Or DEPLOYMENT_QUICK_START.md troubleshooting
+
+
+⚠️ CRITICAL WARNINGS
+════════════════════════════════════════════════════════════════════════════════
+
+🔴 DO NOT skip hardware wiring verification:
+   Incorrect wiring can damage the microphone or ESP32
+   Follow WIRING_STEPS_SIMPLE.txt exactly
+
+🔴 DO NOT skip microphone testing:
+   Many issues are easier to diagnose with microphone test first
+   Complete Phase 2 before moving to Phase 5
+
+🔴 DO NOT reverse power connections:
+   VDD (3.3V) on wrong pin could fry microphone
+   Double-check before plugging in USB
+
+🔴 DO NOT unplug USB while uploading:
+   Can corrupt firmware, leaving ESP32 unable to update
+   Wait for "Upload successful" message
+
+🔴 DO NOT modify GPIO pins without understanding:
+   Incorrect pin assignment will break audio capture
+   Use GPIO 4, 5, 6 exactly as specified
+
+
+📞 TROUBLESHOOTING QUICK START
+════════════════════════════════════════════════════════════════════════════════
+
+Problem: "COM port not found"
+   → Unplug USB, wait 3 seconds, plug back in
+   → Check Device Manager for new COM port
+
+Problem: "Upload failed"
+   → Check COM port in Tools → Port
+   → Try different USB port on computer
+   → Try different USB cable
+
+Problem: Serial Monitor shows garbage
+   → Check baud rate (bottom-right): should be 9600
+   → Click dropdown and select 9600
+
+Problem: Microphone values stuck at 0
+   → Check GPIO pins 4, 5, 6 are correct
+   → Measure power: VDD-GND should read 3.3V ± 0.1V
+   → Try different USB cable for more power
+
+For complete troubleshooting, see: QUICK_COMMANDS.txt
+
+
+✅ SUCCESS CRITERIA
+════════════════════════════════════════════════════════════════════════════════
+
+You've successfully deployed when:
+
+1. ✅ Microphone test passes
+   → RMS values jump 3-5x when speaking (not stuck at 0)
+
+2. ✅ Model file is valid
+   → File exists, 200-500 KB, loads in Python
+
+3. ✅ Server runs without errors
+   → Dashboard accessible at http://localhost:8765
+
+4. ✅ ESP32 connects to WiFi
+   → Serial Monitor shows "Connected! IP: 192.168.x.x"
+
+5. ✅ ESP32 connects to server
+   → Server logs show "Client connected"
+
+6. ✅ Keyword detection works
+   → Saying "DORA" triggers 85%+ of the time
+   → Other words don't trigger (false positive < 1 per min)
+
+7. ✅ System is stable
+   → Runs 5+ minutes without crashing
+
+
+🎁 YOU ALREADY HAVE
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Fully trained TensorFlow Lite model (quantized)
+✓ Complete Arduino firmware for microphone test
+✓ Optional: Full inference firmware with WiFi support
+✓ Dashboard server with WebSocket support
+✓ All documentation and guides
+✓ Test procedures and validation checklists
+✓ Troubleshooting guides
+
+
+🛠️ WHAT YOU NEED TO DO (NEW)
+════════════════════════════════════════════════════════════════════════════════
+
+1. Wire the microphone (Phase 1)
+2. Upload test firmware (Phase 2)
+3. Validate setup (Phases 3-7)
+4. Test end-to-end (Phase 7)
+
+
+📈 WHAT HAPPENS NEXT
+════════════════════════════════════════════════════════════════════════════════
+
+After deployment passes:
+
+Short term (1-2 hours):
+  - Collect more keyword samples for accuracy testing
+  - Measure latency and detection rates
+  - Test in different noise environments
+
+Medium term (1-2 days):
+  - Train improved model with more data
+  - Tune detection threshold for your use case
+  - Add second keyword ("HELLO") or extend
+
+
+Long term (1-2 weeks):
+  - Deploy to production fleet
+  - Integrate with downstream applications
+  - Optimize for power consumption
+
+
+🎯 YOUR MISSION STARTS HERE
+════════════════════════════════════════════════════════════════════════════════
+
+Step 1: Read DEPLOYMENT_SUMMARY.txt (5 min)
+Step 2: Open DEPLOYMENT_QUICK_START.md (bookmark this!)
+Step 3: Open PHASE_CHECKLIST.txt (track progress)
+Step 4: Keep QUICK_COMMANDS.txt handy
+Step 5: Follow Phase 1 through Phase 7
+
+Expected completion: 45-60 minutes
+
+
+❓ COMMON QUESTIONS
+════════════════════════════════════════════════════════════════════════════════
+
+Q: Can I use a different microphone?
+A: Need I2S digital microphone (not analog). INMP441 is recommended.
+
+Q: Can I use Arduino Uno instead of ESP32-S3?
+A: No. Arduino Uno doesn't have WiFi or enough RAM. Need ESP32-S3.
+
+Q: Do I need a specific WiFi network?
+A: Need 2.4GHz (not 5GHz). Can use phone hotspot.
+
+Q: Can I deploy without the server?
+A: Yes, after Phase 7. Inference runs entirely on ESP32.
+
+Q: How do I add a second keyword?
+A: Retrain model with two classes instead of one. See docs/06_Model_Pipeline.md
+
+Q: What if microphone test fails?
+A: Check wiring against WIRING_STEPS_SIMPLE.txt. Most common: GPIO pins wrong.
+
+
+📞 NEED HELP?
+════════════════════════════════════════════════════════════════════════════════
+
+1. Search this file (Ctrl+F)
+2. Check QUICK_COMMANDS.txt troubleshooting
+3. Read DEPLOYMENT_QUICK_START.md (detailed explanations)
+4. Review TESTING_PROTOCOL.md (exact test procedures)
+5. Check docs/ folder (architecture & design)
+
+
+🎓 LEARNING RESOURCES
+════════════════════════════════════════════════════════════════════════════════
+
+About ESP32:
+  https://www.espressif.com/en/products/microcontrollers/esp32
+  https://docs.espressif.com/projects/esp-idf/
+
+About Arduino:
+  https://www.arduino.cc/en/software
+  https://docs.arduino.cc/
+
+About TensorFlow Lite:
+  https://www.tensorflow.org/lite/microcontrollers
+
+About I2S:
+  https://en.wikipedia.org/wiki/I²S
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+            ✨ YOU'RE READY! EVERYTHING IS PREPARED. ✨
+
+                    👉 START WITH THESE 3 DOCUMENTS:
+
+         1. DEPLOYMENT_SUMMARY.txt (overview)
+         2. DEPLOYMENT_QUICK_START.md (detailed guide)
+         3. PHASE_CHECKLIST.txt (progress tracker)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+            Let's get DORA running on your ESP32! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════
