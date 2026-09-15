@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --color-sky-brutal: #38BDF8;
+  --color-sky-deep: #0EA5E9;
+  --color-sky-pale: #E0F2FE;
+  --color-sky-glow: #7DD3FC;
+  --color-ink: #0A0A0A;
+  --color-white: #FFFFFF;
+  --color-muted: #F0F9FF;
+  --color-border: #0A0A0A;
+  --color-accent: #0EA5E9;
+  --color-danger: #EF4444;
+  --color-success: #22C55E;
+  --color-warn: #F59E0B;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #F0F9FF;
+  color: #0A0A0A;
+  margin: 0;
+}
+
+/* Dot grid background */
+.dot-grid-light {
+  background-image: radial-gradient(circle, #38BDF8 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-color: #F0F9FF;
+}
+.dot-grid-dark {
+  background-image: radial-gradient(circle, rgba(56,189,248,0.18) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-color: #020B14;
+}
+
+/* Brutalist card */
+.brutal-card {
+  background: #FFFFFF;
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 4px 4px 0px #0A0A0A;
+  border-radius: 0px;
+}
+
+.brutal-card-blue {
+  background: #38BDF8;
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 4px 4px 0px #0A0A0A;
+  border-radius: 0px;
+}
+
+.brutal-btn {
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 3px 3px 0px #0A0A0A;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+
+.brutal-btn:active {
+  box-shadow: 1px 1px 0px #0A0A0A;
+  transform: translate(2px, 2px);
+}
+
+/* Orb glow animation */
+@keyframes orb-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0px rgba(56, 189, 248, 0.7),
+      0 0 30px 8px rgba(56, 189, 248, 0.5),
+      0 0 60px 20px rgba(14, 165, 233, 0.3),
+      4px 4px 0px #0A0A0A;
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(56, 189, 248, 0.2),
+      0 0 50px 18px rgba(56, 189, 248, 0.6),
+      0 0 90px 35px rgba(14, 165, 233, 0.35),
+      4px 4px 0px #0A0A0A;
+  }
+}
+
+@keyframes orb-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes wave-bar {
+  0%, 100% { height: 8px; }
+  50% { height: 32px; }
+}
+
+@keyframes tick {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+@keyframes slide-in {
+  from { transform: translateY(-4px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.orb-active {
+  animation: orb-pulse 1.8s ease-in-out infinite;
+}
+
+.orb-ring {
+  animation: orb-ring 1.8s ease-out infinite;
+}
+
+.wave-bar {
+  animation: wave-bar ease-in-out infinite;
+}
+
+.tick-dot {
+  animation: tick 1s ease-in-out infinite;
+}
+
+/* Progress bar */
+.progress-track {
+  background: #E0F2FE;
+  border: 2px solid #0A0A0A;
+  height: 14px;
+  width: 100%;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #38BDF8;
+  border-right: 2px solid #0A0A0A;
+  transition: width 0.6s ease;
+}
+
+.progress-fill-warn {
+  background: #F59E0B;
+}
+
+.progress-fill-danger {
+  background: #EF4444;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #E0F2FE; }
+::-webkit-scrollbar-thumb { background: #38BDF8; border: 1px solid #0A0A0A; }
+
+.stat-value {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+}

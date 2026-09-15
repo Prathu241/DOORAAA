@@ -1,0 +1,6 @@
+feature_shape: (273, 40)
+DORA_seq_peak: 0.9984
+DORA_seq_mean: 0.2376
+BG_seq_peak: 0.2413
+BG_seq_mean: 0.0427
+DONE

@@ -65,6 +65,7 @@ cd dora_firmware && idf.py build flash monitor
 | [11](./11_Deployment_Guide.md) | **Deployment Guide** | Full setup from zero, one-time downloads, hardware assembly, training walkthrough, finale USB kit |
 | [12](./12_Resource_Budget.md) | **Resource Budget** | RAM ledger (168–188 KB total), flash budget, CPU budget, power budget, competitor comparison |
 | [13](./13_Grand_Finale_Playbook.md) | **Grand Finale Playbook** | Keyword swap timeline, one-command script, contingency plans, dry-run instructions, finale day checklist |
+| [14](./14_Edge_Cloud_Implementation_Guide.md) | **Edge Cloud Implementation Guide** | Implemented Wi-Fi PCM handoff, gateway setup, flash checklist, and physical validation record |
 
 ---
 

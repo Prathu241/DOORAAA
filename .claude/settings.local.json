@@ -1,0 +1,5 @@
+{
+  "primary_api_base": "http://localhost:20128/v1",
+  "model": "deepseek-chat",
+  "api_key": "omniroute"
+}

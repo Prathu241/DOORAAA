@@ -1,0 +1,205 @@
+╔════════════════════════════════════════════════════════════════╗
+║                   DORA DASHBOARD - QUICK START                 ║
+║                  Voice Detection System v1.0                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🚀 START SYSTEM (3 COMMANDS)                                 │
+└──────────────────────────────────────────────────────────────┘
+
+1. Open PowerShell Terminal 1:
+   cd C:\Users\PRATHAM\DORA_MIXED-net\dashboard
+   node esp32-bridge.js
+
+2. Open PowerShell Terminal 2:
+   cd C:\Users\PRATHAM\DORA_MIXED-net\dashboard
+   npm run dev
+
+3. Open Browser:
+   http://localhost:5173
+
+┌──────────────────────────────────────────────────────────────┐
+│ ✅ VERIFICATION CHECKLIST                                    │
+└──────────────────────────────────────────────────────────────┘
+
+Terminal 1 shows:
+  ✓ Serial bridge started
+  ✓ Listening on COM11 @ 115200 baud
+  ✓ WebSocket server: ws://localhost:8080
+
+Terminal 2 shows:
+  ✓ VITE ready
+  ✓ Local: http://localhost:5173
+
+Browser shows:
+  ✓ Neon blue dashboard loaded
+  ✓ Voice orb visible (blue circle)
+  ✓ Top-right: "ESP32 LIVE" (green) or "DEMO MODE" (red)
+  ✓ System metrics displayed
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🎤 TESTING VOICE DETECTION                                   │
+└──────────────────────────────────────────────────────────────┘
+
+1. Check connection:
+   Dashboard top-right should show "ESP32 LIVE" with green dot
+
+2. Speak normally:
+   → Voice orb turns GREEN
+   → "🎤 LISTENING" text appears
+   → RMS Level increases (40-300)
+
+3. Say "DORA" clearly:
+   → Orb flashes RED/ORANGE
+   → Text shows: "DORA"
+   → New entry in detection log
+   → Graph shows confidence spike
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🔧 BEFORE STARTING (ONE-TIME SETUP)                          │
+└──────────────────────────────────────────────────────────────┘
+
+1. Install Arduino libraries:
+   Tools → Manage Libraries → Search "WebSocketsClient"
+   Install: "WebSockets by Markus Sattler"
+
+2. Edit firmware WiFi settings:
+   Open: ESP32_MIC_TEST/dora_full_inference.ino
+   Change:
+     #define WIFI_SSID "YOUR_WIFI_NAME"
+     #define WIFI_PASS "YOUR_WIFI_PASSWORD"
+     #define SERVER_IP "192.168.1.100"  // Run: ipconfig
+
+3. Upload to ESP32:
+   - Connect ESP32 via USB
+   - Select Board: ESP32S3 Dev Module
+   - Select Port: COM11 (check Device Manager)
+   - Click Upload
+   - Wait for "Hard resetting via RTS pin..."
+
+4. IMPORTANT: Close Arduino Serial Monitor!
+   (Serial Monitor blocks COM port, bridge won't work)
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🐛 TROUBLESHOOTING                                           │
+└──────────────────────────────────────────────────────────────┘
+
+Problem: Dashboard shows "DEMO MODE"
+Fix: Check ESP32 connected, bridge running on correct COM port
+
+Problem: "Port COM11 is busy"
+Fix: Close Arduino Serial Monitor completely
+
+Problem: Voice orb not responding
+Fix: Check microphone wiring, verify RMS level changes
+
+Problem: RMS stuck at 1.0
+Fix: Hardware issue - check GPIO pins, re-upload firmware
+
+Problem: WebSocket connection failed
+Fix: Make sure Terminal 1 (bridge) is running first
+
+┌──────────────────────────────────────────────────────────────┐
+│ 📊 DASHBOARD FEATURES                                        │
+└──────────────────────────────────────────────────────────────┘
+
+VOICE ORB (top-left):
+  - Blue → Idle, waiting for audio
+  - Green → Voice detected, listening
+  - Red → "DORA" detected with high confidence
+
+SYSTEM METRICS:
+  - CPU: Processing load (target < 10%)
+  - RAM: Memory usage (out of 256KB)
+  - Flash: Model size on ESP32
+
+MICROPHONE STATUS:
+  - RMS Level: Audio intensity (40-60 silent, 200-300 speaking)
+  - Peak: Maximum amplitude
+  - Samples: Total audio frames captured
+
+DETECTION GRAPH:
+  - Green line: Confidence score (0.0 - 1.0)
+  - Red dashed: Threshold at 0.7
+  - Shows last 50 detections
+
+DETECTION LOG:
+  - Time: HH:MM:SS timestamp
+  - Confidence: Model score (0.85-0.99 typical)
+  - Latency: Response time in ms
+  - Verdict: TP (true) or FP (false)
+
+┌──────────────────────────────────────────────────────────────┐
+│ 📂 IMPORTANT FILES                                           │
+└──────────────────────────────────────────────────────────────┘
+
+Firmware:
+  ESP32_MIC_TEST/dora_full_inference.ino
+
+Dashboard:
+  dashboard/esp32-bridge.js          (Serial → WebSocket)
+  dashboard/src/components/          (UI components)
+  dashboard/DASHBOARD_START.md       (Full guide)
+
+Documentation:
+  DASHBOARD_FIXES_SUMMARY.md         (What was changed)
+  QUICK_START_CARD.txt              (This file)
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🎯 SUCCESS CRITERIA                                          │
+└──────────────────────────────────────────────────────────────┘
+
+System is working correctly when:
+  ✓ Dashboard shows "ESP32 LIVE"
+  ✓ Metrics show real values (not zeros)
+  ✓ RMS level responds to audio
+  ✓ Orb turns green when speaking
+  ✓ "DORA" triggers red flash + log entry
+  ✓ Graph updates with confidence
+  ✓ Detection runs continuously (24/7)
+
+┌──────────────────────────────────────────────────────────────┐
+│ ⚠️  COMMON MISTAKES                                          │
+└──────────────────────────────────────────────────────────────┘
+
+❌ Forgot to close Arduino Serial Monitor
+   → Port busy error
+
+❌ Started Terminal 2 before Terminal 1
+   → WebSocket connection fails
+
+❌ Didn't edit WiFi credentials in firmware
+   → ESP32 can't connect to network
+
+❌ Used wrong COM port in bridge
+   → No data received from ESP32
+
+❌ WebSockets library not installed
+   → Firmware compilation fails
+
+┌──────────────────────────────────────────────────────────────┐
+│ 📞 CONTACT & INFO                                            │
+└──────────────────────────────────────────────────────────────┘
+
+Project: DORA Edge Voice Activation System
+SIH ID: 26172
+Organization: ISRO / Department of Space
+Category: Hardware / Smart Automation
+Theme: Neon Blue Futuristic Design
+
+System Architecture:
+  INMP441 Mic → ESP32-S3 → MixedNet KWS → Serial → Bridge → Dashboard
+
+Detection: Continuous 24/7 streaming inference
+No time limits, no recording modes, always listening
+
+┌──────────────────────────────────────────────────────────────┐
+│ 🔥 READY TO GO!                                              │
+└──────────────────────────────────────────────────────────────┘
+
+All components ready. Upload firmware and test!
+
+For detailed instructions: See DASHBOARD_START.md
+For technical details: See DASHBOARD_FIXES_SUMMARY.md
+
+═══════════════════════════════════════════════════════════════

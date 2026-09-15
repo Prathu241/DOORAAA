@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <style>
+    .title{font:700 46px Arial,sans-serif;fill:#102a43}.sub{font:400 20px Arial,sans-serif;fill:#486581}.head{font:700 24px Arial,sans-serif;fill:#fff}.boxh{font:700 21px Arial,sans-serif;fill:#102a43}.txt{font:400 18px Arial,sans-serif;fill:#243b53}.small{font:400 16px Arial,sans-serif;fill:#243b53}.noteh{font:700 20px Arial,sans-serif;fill:#7c2d12}.note{font:400 16px Arial,sans-serif;fill:#7c2d12}
+  </style>
+  <rect width="1600" height="900" fill="#f8fbff"/>
+  <rect x="0" y="0" width="1600" height="13" fill="#0875c1"/>
+  <text x="800" y="74" text-anchor="middle" class="title">DORA — VERIFIED TECHNICAL STACK</text>
+  <text x="800" y="108" text-anchor="middle" class="sub">Current implementation separated from planned production enhancements</text>
+  <g>
+    <rect x="70" y="155" width="420" height="505" rx="18" fill="#fff" stroke="#1f78b4" stroke-width="3"/>
+    <rect x="70" y="155" width="420" height="58" rx="18" fill="#176ca5"/>
+    <text x="280" y="193" text-anchor="middle" class="head">1 · EDGE DEVICE</text>
+    <rect x="98" y="238" width="364" height="86" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="120" y="270" class="boxh">ESP32-S3</text><text x="120" y="299" class="txt">INMP441 I²S microphone · 16 kHz</text>
+    <rect x="98" y="343" width="364" height="110" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="120" y="376" class="boxh">On-device keyword spotting</text><text x="120" y="405" class="txt">TFLite Micro + Streaming MixedNet</text><text x="120" y="431" class="small">MFCC-like audio frontend</text>
+    <rect x="98" y="472" width="364" height="130" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="120" y="505" class="boxh">Audio buffer &amp; event stream</text><text x="120" y="534" class="txt">300 ms pre-roll ring buffer</text><text x="120" y="560" class="txt">Raw PCM16 audio after detection</text><text x="120" y="585" class="small">Live detection confidence telemetry</text>
+  </g>
+  <g>
+    <rect x="590" y="155" width="420" height="505" rx="18" fill="#fff" stroke="#1f78b4" stroke-width="3"/>
+    <rect x="590" y="155" width="420" height="58" rx="18" fill="#176ca5"/>
+    <text x="800" y="193" text-anchor="middle" class="head">2 · LOCAL TRANSPORT</text>
+    <rect x="618" y="250" width="364" height="105" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="640" y="283" class="boxh">Wi-Fi local network</text><text x="640" y="312" class="txt">Pre-connected WebSocket (ws://)</text><text x="640" y="337" class="small">Binary PCM16 audio stream</text>
+    <path d="M800 378 L800 432" stroke="#0875c1" stroke-width="5"/><path d="M788 418 L800 436 L812 418" fill="#0875c1"/>
+    <rect x="618" y="456" width="364" height="105" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="640" y="489" class="boxh">Dashboard connection</text><text x="640" y="518" class="txt">ESP32 serial → Node.js bridge</text><text x="640" y="543" class="small">Bridge broadcasts real-time events</text>
+  </g>
+  <g>
+    <rect x="1110" y="155" width="420" height="505" rx="18" fill="#fff" stroke="#1f78b4" stroke-width="3"/>
+    <rect x="1110" y="155" width="420" height="58" rx="18" fill="#176ca5"/>
+    <text x="1320" y="193" text-anchor="middle" class="head">3 · LOCAL SERVER &amp; UI</text>
+    <rect x="1138" y="250" width="364" height="105" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="1160" y="283" class="boxh">Python Vosk ASR</text><text x="1160" y="312" class="txt">Offline speech-to-text server</text><text x="1160" y="337" class="small">Receives 16 kHz mono PCM16</text>
+    <rect x="1138" y="395" width="364" height="130" rx="10" fill="#eef7ff" stroke="#b8d9ef"/>
+    <text x="1160" y="428" class="boxh">React + Vite dashboard</text><text x="1160" y="457" class="txt">Node.js WebSocket bridge</text><text x="1160" y="483" class="txt">Live waveform, status &amp; events</text><text x="1160" y="508" class="small">Vosk / mock source visibly indicated</text>
+  </g>
+  <path d="M495 405 L580 405" stroke="#0875c1" stroke-width="6"/><path d="M564 392 L586 405 L564 418" fill="#0875c1"/>
+  <path d="M1015 405 L1100 405" stroke="#0875c1" stroke-width="6"/><path d="M1084 392 L1106 405 L1084 418" fill="#0875c1"/>
+  <rect x="70" y="710" width="1460" height="130" rx="16" fill="#fff7ed" stroke="#fb923c" stroke-width="3"/>
+  <text x="100" y="750" class="noteh">PLANNED / NOT YET VERIFIED IN THE CURRENT BUILD</text>
+  <text x="100" y="787" class="note">Opus compression  ·  WSS/TLS transport  ·  confirmed INT8 deployment  ·  FastAPI production server  ·  MongoDB persistence</text>
+  <text x="100" y="816" class="note">Show these as roadmap items, not as implemented stack components.</text>
+</svg>

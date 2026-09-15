@@ -1,184 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700;800;900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --color-sky-brutal: #38BDF8;
+  --color-sky-deep: #0EA5E9;
+  --color-sky-pale: #E0F2FE;
+  --color-sky-glow: #7DD3FC;
+  --color-ink: #0A0A0A;
+  --color-white: #FFFFFF;
+  --color-muted: #F0F9FF;
+  --color-border: #0A0A0A;
+  --color-accent: #0EA5E9;
+  --color-danger: #EF4444;
+  --color-success: #22C55E;
+  --color-warn: #F59E0B;
+}
+
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  --primary: #00d4ff;
-  --secondary: #ff006e;
-  --accent: #7209b7;
-  --dark-bg: #0a0e27;
-  --card-bg: #1a1f3a;
-  --border: #2d3561;
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0a0;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --chart-primary: #00d4ff;
-  --chart-secondary: #7209b7;
-}
-
 body {
-  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1535 50%, var(--dark-bg) 100%);
-  color: var(--text-primary);
-  overflow-x: hidden;
+  font-family: 'DM Sans', sans-serif;
+  background-color: #F0F9FF;
+  color: #0A0A0A;
+  margin: 0;
 }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
+/* Dot grid background */
+.dot-grid-light {
+  background-image: radial-gradient(circle, #38BDF8 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-color: #F0F9FF;
+}
+.dot-grid-dark {
+  background-image: radial-gradient(circle, rgba(56,189,248,0.18) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-color: #020B14;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Brutalist card */
+.brutal-card {
+  background: #FFFFFF;
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 4px 4px 0px #0A0A0A;
+  border-radius: 0px;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--card-bg);
+.brutal-card-blue {
+  background: #38BDF8;
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 4px 4px 0px #0A0A0A;
+  border-radius: 0px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
+.brutal-btn {
+  border: 2.5px solid #0A0A0A;
+  box-shadow: 3px 3px 0px #0A0A0A;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  transition: box-shadow 0.1s, transform 0.1s;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+.brutal-btn:active {
+  box-shadow: 1px 1px 0px #0A0A0A;
+  transform: translate(2px, 2px);
 }
 
-/* Utility classes */
-.glass {
-  background: rgba(26, 31, 58, 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  border-radius: 12px;
-}
-
-.glow {
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-  transition: box-shadow 0.3s ease;
-}
-
-.glow:hover {
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-}
-
-.pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
+/* Orb animations */
+@keyframes orb-pulse {
   0%, 100% {
-    opacity: 1;
+    box-shadow:
+      0 0 0 0px rgba(56,189,248,0.7),
+      0 0 30px 8px rgba(56,189,248,0.5),
+      0 0 60px 20px rgba(14,165,233,0.3),
+      4px 4px 0px #0A0A0A;
   }
   50% {
-    opacity: 0.5;
+    box-shadow:
+      0 0 0 8px rgba(56,189,248,0.2),
+      0 0 50px 18px rgba(56,189,248,0.6),
+      0 0 90px 35px rgba(14,165,233,0.35),
+      4px 4px 0px #0A0A0A;
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+@keyframes orb-ring {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes wave-bar {
+  0%, 100% { height: 8px; }
+  50%       { height: 32px; }
 }
 
-.slide-in {
-  animation: slideIn 0.3s ease-out;
+@keyframes tick {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes slide-in {
+  from { transform: translateY(-4px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* Button styles */
-button {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
+.orb-active {
+  animation: orb-pulse 1.8s ease-in-out infinite;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+.wave-bar {
+  animation: wave-bar ease-in-out infinite;
 }
 
-button:active {
-  transform: translateY(0);
+.tick-dot {
+  animation: tick 1s ease-in-out infinite;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
+/* Scrollbar */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #E0F2FE; }
+::-webkit-scrollbar-thumb { background: #38BDF8; border: 1px solid #0A0A0A; }
 
-/* Status badge */
-.status-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+.stat-value {
+  font-family: 'Space Mono', monospace;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-success {
-  background: rgba(16, 185, 129, 0.2);
-  color: var(--success);
-  border: 1px solid var(--success);
-}
-
-.status-warning {
-  background: rgba(245, 158, 11, 0.2);
-  color: var(--warning);
-  border: 1px solid var(--warning);
-}
-
-.status-error {
-  background: rgba(239, 68, 68, 0.2);
-  color: var(--error);
-  border: 1px solid var(--error);
-}
-
-.status-idle {
-  background: rgba(160, 160, 160, 0.2);
-  color: var(--text-secondary);
-  border: 1px solid var(--text-secondary);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  :root {
-    font-size: 14px;
-  }
 }

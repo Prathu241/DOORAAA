@@ -1,0 +1,10 @@
+{
+  "description": "Monitor and control ESP32 devices with a real-time dashboard displaying live stats, voice recording, and performance metrics for enhanced efficiency.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

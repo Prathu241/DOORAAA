@@ -36,3 +36,6 @@ Thumbs.db
 .temp/
 temp/
 push_output.txt
+
+# Device-specific Wi-Fi and server settings. Keep credentials out of source control.
+ESP32_MIC_TEST/dora_full_inference/secrets.h

@@ -1,0 +1,290 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      DORA DASHBOARD - VISUAL LAYOUT                          ║
+║                         Neon Blue Futuristic Theme                           ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ HEADER                                                                       │
+│                                                                              │
+│ ┌────┐  D:OR                                                                │
+│ │D:OR│  DORA — Edge Voice Activator                    KEYWORD: DORA        │
+│ └────┘  SIH26172 · ISRO / Dept. of Space              ● ESP32 LIVE  12:45:30│
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ GRID LAYOUT (4 columns)                                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────┬──────────────────────────────────────────────────────┐
+│ VOICE ORB (Col 1)   │ SIGNAL PIPELINE (Col 2-4, span 3)                   │
+├─────────────────────┼──────────────────────────────────────────────────────┤
+│                     │                                                      │
+│ Voice Detection     │ Signal Pipeline                         Fig.1·Tier 0-3│
+│ Status  [Real-Time] │                                                      │
+│                     │ ┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐       │
+│                     │ │ MIC  │ →  │ VAD  │ →  │KWS   │ →  │STREAM│ → ASR │
+│       ╭───╮         │ │(I2S) │    │      │    │      │    │      │       │
+│      ╱ ○ ○ ╲        │ │16kHz │    │<0.1% │    │<10ms │    │300ms │       │
+│     │  ◉   │        │ └──────┘    └──────┘    └──────┘    └──────┘       │
+│      ╲ ○ ○ ╱        │                                                      │
+│       ╰───╯         │ Current: MixedNet KWS ← ACTIVE                       │
+│                     │                                                      │
+│  Waiting for        │                                                      │
+│  audio...           │                                                      │
+│                     │                                                      │
+│  RMS Level    0.0   │                                                      │
+│  Peak         0     │                                                      │
+│  Status       IDLE  │                                                      │
+│                     │                                                      │
+└─────────────────────┴──────────────────────────────────────────────────────┘
+
+ORBED STATES:
+  Blue (●) - IDLE - Waiting for audio
+  Green (●) - ACTIVE - Voice detected, rings pulsing
+  Red (●) - DETECTED - "DORA" spoken, flash animation
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────┬──────────────────────┬──────────────────────┬────────┐
+│ LATENCY (Col 1)     │ SYSTEM LOAD (Col 2)  │ MIC FEED (Col 3)     │ etc... │
+├─────────────────────┼──────────────────────┼──────────────────────┼────────┤
+│                     │                      │                      │        │
+│ Keyword-End → ASR   │ System Load     §8   │ Microphone Live Feed │        │
+│ Latency        §12  │                      │              ESP32   │        │
+│                     │ RAM (KWS subsystem)  │                      │        │
+│      58 ms          │ 150 / 256 KB         │ RMS Level     42.5   │        │
+│                     │ ██████████░░░░░  59% │ Peak Amplitude 1024  │        │
+│ round trip,         │                      │ Total Samples  18176 │        │
+│ clock-synced        │ CPU (avg, idle)      │                      │        │
+│                     │ 7%                   │ Status               │        │
+│ TARGET < 300 ms     │ ███░░░░░░░░░░░░  35% │ CAPTURING AUDIO      │        │
+│ LAN estimate 25-75  │                      │                      │        │
+│                     │ Flash footprint      │                      │        │
+│                     │ 78 / 100 KB          │                      │        │
+│                     │ ████████████░░  78%  │                      │        │
+│                     │                      │                      │        │
+└─────────────────────┴──────────────────────┴──────────────────────┴────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DETECTION CONFIDENCE HISTORY (Col 1-2, span 2)                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                           Last 50 detections  │
+│                                                                              │
+│ 1.0 ┤                                                                        │
+│     │    ╱╲                                                                  │
+│ 0.9 ┤   ╱  ╲    ╱╲                                                           │
+│     │  ╱    ╲  ╱  ╲      ╱╲                                                  │
+│ 0.8 ┤ ╱      ╲╱    ╲    ╱  ╲                                                 │
+│     │╱              ╲  ╱    ╲                                                │
+│ 0.7 ┼ ─ ─ ─ ─ ─ ─ ─ ─╲╱─ ─ ─ ╲─ ─ ─ ─  Threshold: 0.7                       │
+│     │                        ╲                                               │
+│ 0.6 ┤                         ╲                                              │
+│     │                          ╲                                             │
+│ 0.5 ┤                           ╲                                            │
+│     │                            ╲                                           │
+│ 0.0 ┴────────────────────────────╲──────────────────────────────────────▶   │
+│                                                                     Time     │
+│                                                                              │
+│ Legend:  ──── Confidence    - - - Threshold    Shaded area = Confidence zone│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DETECTION LOG (Col 1-4, span 4)                                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│ Detection Stream                                            §4 · rolling 24h │
+│                                                                              │
+│ ┌──────────┬────────────┬─────────┬─────────────────────────────────┬────┐ │
+│ │ TIME     │ CONFIDENCE │ LATENCY │ TRANSCRIPT                      │ V  │ │
+│ ├──────────┼────────────┼─────────┼─────────────────────────────────┼────┤ │
+│ │ 12:45:23 │ 0.913      │ 53 ms   │ DORA                            │ TP │ │
+│ │ 12:44:58 │ 0.891      │ 67 ms   │ DORA                            │ TP │ │
+│ │ 12:44:32 │ 0.873      │ 45 ms   │ DORA                            │ TP │ │
+│ │ 12:43:15 │ 0.756      │ 89 ms   │ DORA                            │ FP │ │
+│ │ 12:42:01 │ 0.908      │ 51 ms   │ DORA                            │ TP │ │
+│ │ 12:41:47 │ 0.884      │ 72 ms   │ DORA                            │ TP │ │
+│ │ ...      │ ...        │ ...     │ ...                             │... │ │
+│ └──────────┴────────────┴─────────┴─────────────────────────────────┴────┘ │
+│                                                                              │
+│ TP = True Positive (correct detection)                                      │
+│ FP = False Positive (false alarm)                                           │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ WAVEFORM VISUALIZATION (Col 1-4, span 4)                                     │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│ Waveform Monitor                                              §11 · t+5,302s │
+│                                                                              │
+│     ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃        │
+│     ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃        │
+│   ┃ ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃     │
+│ ━━┃━┃━━┃━┃━┃━┃━┃━┃━┃━┃━━┃━━┃━┃━┃━┃━┃━┃━┃━┃━━┃━━┃━┃━┃━┃━┃━┃━┃━┃━━┃━━┃━━━ │
+│   ┃ ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃  ┃  ┃     │
+│     ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃        │
+│     ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃  ┃   ┃ ┃   ┃   ┃  ┃        │
+│                                                                              │
+│ Green bars (●) = Idle listening                                             │
+│ Orange bars (●) = Detection event (flashes for 400ms)                       │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                           COLOR SCHEME LEGEND                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+PRIMARY COLORS (unchanged):
+  ● #0AF (Neon cyan blue) - Primary highlights, borders, text
+  ● #00B85C (Success green) - Positive states, TP verdicts, active indicators
+  ● #FF5A1F (Warning orange) - Detection events, FP verdicts, alerts
+
+BACKGROUND:
+  ● #06070A (Deep black) - Main background
+  ● #0A0C10 (Panel black) - Panel backgrounds
+  ● #1A1D24 (Border gray) - Subtle borders
+
+TEXT:
+  ● #E5E5E5 (Off-white) - Main text
+  ● #667 (Muted gray) - Secondary text
+  ● #334 (Dark gray) - Tertiary text
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        INTERACTIVE ELEMENTS                                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+VOICE ORB STATES:
+
+1. IDLE (Blue):
+   ╭───╮
+  ╱ ○ ○ ╲     ← Blue core
+ │  ●   │     ← Static rings
+  ╲ ○ ○ ╱
+   ╰───╯
+   
+   Status: "Waiting for audio..."
+   RMS: 0-50
+
+2. LISTENING (Green):
+   ╭───╮
+  ╱ ⊙ ⊙ ╲     ← Green core, pulsing
+ │  ◉   │     ← Rings expanding outward
+  ╲ ⊙ ⊙ ╱     ← Breathing animation
+   ╰───╯
+   
+   Status: "🎤 LISTENING"
+   RMS: 50-200
+
+3. DETECTED (Red):
+   ╭───╮
+  ╱ ◎ ◎ ╲     ← Red core, flash
+ │  ◉   │     ← Rings glow bright
+  ╲ ◎ ◎ ╱     ← Scale animation
+   ╰───╯
+   
+   Status: "DORA"
+   RMS: >200, confidence >0.7
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         RESPONSIVE BEHAVIOR                                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+DESKTOP (>1400px):
+  Grid: 4 columns
+  Voice orb: 1 column
+  Pipeline: 3 columns
+  Graph: 2 columns
+  All panels visible
+
+TABLET (768px - 1400px):
+  Grid: 2 columns
+  Voice orb: 1 column
+  Pipeline: 2 columns (wraps)
+  Graph: 2 columns
+  Scrollable
+
+MOBILE (<768px):
+  Grid: 1 column
+  All panels stack vertically
+  Voice orb: full width
+  Touch-optimized
+  Scrollable
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          REAL-TIME UPDATES                                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+UPDATE FREQUENCIES:
+
+Component            | Update Rate  | Data Source
+---------------------|--------------|---------------------------
+Voice Orb            | 60 FPS       | WebSocket (micData.rms)
+Detection Graph      | On detection | WebSocket (DETECTION msg)
+System Metrics (CPU) | ~100ms       | Derived from RMS
+Microphone RMS       | ~50ms        | WebSocket (MIC_DATA msg)
+Detection Log        | On detection | WebSocket (DETECTION msg)
+Waveform Canvas      | 60 FPS       | RequestAnimationFrame
+Connection Status    | Instant      | WebSocket open/close
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                           ACCESSIBILITY                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+✅ High contrast colors (WCAG AA compliant)
+✅ Clear visual states (color + text + shape)
+✅ Large touch targets (44x44px minimum)
+✅ Semantic HTML structure
+✅ Keyboard navigation support
+✅ Screen reader labels (aria-label)
+
+Color-blind friendly:
+  - Blue → Cyan (distinguishable from green)
+  - Green → Success (with text labels)
+  - Orange → Warning (with text labels)
+  - Never color-only indicators
+
+═══════════════════════════════════════════════════════════════════════════════
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         TYPOGRAPHY REFERENCE                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+FONTS:
+  Headings: 'Space Grotesk', sans-serif (Google Fonts)
+  Body: 'Space Grotesk', sans-serif
+  Monospace: 'JetBrains Mono', monospace (metrics, code)
+
+SIZES:
+  H1 (Page title): 24px, bold (700)
+  H2 (Panel titles): 16px, medium (500)
+  Body: 14px, regular (400)
+  Metrics (large): 48px, bold (700)
+  Metrics (small): 14px, mono (600)
+  Tags: 11px, uppercase, letter-spacing 0.5px
+
+═══════════════════════════════════════════════════════════════════════════════
+
+END OF VISUAL GUIDE
+
+For actual dashboard: Open http://localhost:5173 after starting system
+For code reference: See dashboard/src/components/DoraDashboard.jsx + .css
+For testing guide: See DASHBOARD_START.md
+
+Built for SIH26172 ISRO Edge Voice Activation System

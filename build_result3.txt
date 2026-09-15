@@ -1,0 +1,46 @@
+Build started: 13-09-2026 19:25:55.68 
+In file included from C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:67:
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s.h:27:2: warning: #warning "This set of I2S APIs has been deprecated, please include 'driver/i2s_std.h', 'driver/i2s_pdm.h' or 'driver/i2s_tdm.h' instead. if you want to keep using the old APIs and ignore this warning, you can enable 'Suppress legacy driver deprecated warning' option under 'I2S Configuration' menu in Kconfig" [-Wcpp]
+   27 | #warning "This set of I2S APIs has been deprecated, \
+      |  ^~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino: In function 'bool setupI2S()':
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:210:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_count' is deprecated [-Wdeprecated-declarations]
+  210 |   cfg.dma_buf_count         = 4;
+      |       ^~~~~~~~~~~~~
+In file included from C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s.h:20:
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:224:13: note: declared here
+  224 |         int dma_buf_count __attribute__((deprecated));  /*!< This is an alias to 'dma_desc_num' for backward compatibility */
+      |             ^~~~~~~~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:210:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_count' is deprecated [-Wdeprecated-declarations]
+  210 |   cfg.dma_buf_count         = 4;
+      |       ^~~~~~~~~~~~~
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:224:13: note: declared here
+  224 |         int dma_buf_count __attribute__((deprecated));  /*!< This is an alias to 'dma_desc_num' for backward compatibility */
+      |             ^~~~~~~~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:210:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_count' is deprecated [-Wdeprecated-declarations]
+  210 |   cfg.dma_buf_count         = 4;
+      |       ^~~~~~~~~~~~~
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:224:13: note: declared here
+  224 |         int dma_buf_count __attribute__((deprecated));  /*!< This is an alias to 'dma_desc_num' for backward compatibility */
+      |             ^~~~~~~~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:211:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_len' is deprecated [-Wdeprecated-declarations]
+  211 |   cfg.dma_buf_len           = 512;
+      |       ^~~~~~~~~~~
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:228:13: note: declared here
+  228 |         int dma_buf_len __attribute__((deprecated));    /*!< This is an alias to 'dma_frame_num' for backward compatibility */
+      |             ^~~~~~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:211:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_len' is deprecated [-Wdeprecated-declarations]
+  211 |   cfg.dma_buf_len           = 512;
+      |       ^~~~~~~~~~~
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:228:13: note: declared here
+  228 |         int dma_buf_len __attribute__((deprecated));    /*!< This is an alias to 'dma_frame_num' for backward compatibility */
+      |             ^~~~~~~~~~~
+C:\Users\PRATHAM\DORA_MIXED-net\ESP32_MIC_TEST\dora_full_inference\dora_full_inference.ino:211:7: warning: 'i2s_driver_config_t::<unnamed union>::dma_buf_len' is deprecated [-Wdeprecated-declarations]
+  211 |   cfg.dma_buf_len           = 512;
+      |       ^~~~~~~~~~~
+C:\Users\PRATHAM\AppData\Local\Arduino15\packages\esp32\tools\esp32s3-libs\3.3.11/include/driver/deprecated/driver/i2s_types_legacy.h:228:13: note: declared here
+  228 |         int dma_buf_len __attribute__((deprecated));    /*!< This is an alias to 'dma_frame_num' for backward compatibility */
+      |             ^~~~~~~~~~~
+Sketch uses 711452 bytes (54%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 205472 bytes (62%) of dynamic memory, leaving 122208 bytes for local variables. Maximum is 327680 bytes.
+Exit code: 0 

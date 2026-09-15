@@ -241,7 +241,7 @@ flags:
   test_tflite_streaming: 0
   test_tflite_streaming_quantized: 1
   train: 1
-  training_config: ..\training_parameters_DORA_FIXED.yaml
+  training_config: C:\Users\PRATHAM\DORA_MIXED-net\training_parameters_DORA_FIXED.yaml
   use_weights: best_weights
   verbosity: 0
 freq_mask_count:
